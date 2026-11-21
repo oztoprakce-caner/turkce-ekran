@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Турецкий экран</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow app column, like a phone screen; scene stage is the hero, controls stack below it. */
+:root{
+  --bg:#EEF4F3; --surface:#FFFFFF; --surface-2:#E3ECEB; --ink:#0F2429; --muted:#56696E; --line:#D2DFDD;
+  --accent:#0A7F7C; --accent-soft:#D3EFEC; --on-accent:#FFFFFF;
+  --pom:#C2343E; --pom-soft:#F8DEDF; --good:#1E7F48; --good-soft:#D9F0E2; --gold:#B07A12;
+  --font-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --font-ui:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B181C; --surface:#12252A; --surface-2:#18313A; --ink:#E4EFEE; --muted:#8EA5A9; --line:#23404A;
+  --accent:#3CC4BC; --accent-soft:#143A3C; --on-accent:#05211F;
+  --pom:#FF7378; --pom-soft:#3A1C20; --good:#55D08A; --good-soft:#143322; --gold:#F0C25A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B181C; --surface:#12252A; --surface-2:#18313A; --ink:#E4EFEE; --muted:#8EA5A9; --line:#23404A;
+  --accent:#3CC4BC; --accent-soft:#143A3C; --on-accent:#05211F;
+  --pom:#FF7378; --pom-soft:#3A1C20; --good:#55D08A; --good-soft:#143322; --gold:#F0C25A; color-scheme:dark}
+
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.app{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.brand h1{font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:-.01em;margin:0;line-height:1.15}
+.brand h1 span{color:var(--accent)}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.tile{height:10px;border-radius:5px;opacity:.9;
+  background:
+   radial-gradient(circle at 50% 50%, var(--pom) 0 2px, transparent 2.5px) 0 0/20px 10px,
+   linear-gradient(45deg, transparent 40%, var(--accent) 40% 60%, transparent 60%) 0 0/10px 10px,
+   linear-gradient(-45deg, transparent 40%, var(--accent) 40% 60%, transparent 60%) 0 0/10px 10px;}
+.pill{font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px;background:var(--surface);border:1px solid var(--line);white-space:nowrap;color:var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 8px;text-align:center}
+.stat b{display:block;font-family:var(--font-display);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-size:12px}
+.stat.pts b{color:var(--gold)}
+
+.group{display:flex;flex-direction:column;gap:8px}
+.label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 13px;font-size:14px;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:9px 6px;font-size:14px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:600}
+.hint{font-size:13px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:0}
+.warn{font-size:13px;color:var(--pom);background:var(--pom-soft);border-radius:12px;padding:10px 12px;margin:0}
+.cta{display:flex;flex-direction:column;gap:8px}
+.primary{border:0;background:var(--accent);color:var(--on-accent);border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:var(--font-display);letter-spacing:.01em}
+.primary:hover{filter:brightness(1.06)}
+.secondary{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:13px;font-size:15px;font-weight:600}
+.secondary:disabled{opacity:.45;cursor:default}
+.foot{display:flex;justify-content:center;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.link{border:0;background:none;color:var(--muted);text-decoration:underline;font-size:13px;padding:4px}
+.link.danger{color:var(--pom)}
+
+/* play */
+.bar{display:flex;align-items:center;justify-content:space-between;font-size:14px;color:var(--muted)}
+.bar button{border:0;background:none;color:var(--muted);font-weight:600;padding:4px 0}
+.bar .ptsnow{color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+.progress{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.stage{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:400/250;max-width:100%;background:#1b2a30;box-shadow:0 10px 30px -18px rgba(0,30,40,.6)}
+.stage svg{display:block;width:100%;height:100%}
+.stage svg text{font-family:var(--font-ui)}
+.tag{position:absolute;top:10px;left:10px;background:rgba(10,24,28,.72);color:#fff;font-size:11px;font-weight:600;padding:4px 9px;border-radius:99px;letter-spacing:.02em}
+.sub{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);max-width:88%;width:max-content;background:rgba(8,18,22,.82);color:#fff;
+  font-size:15px;font-weight:600;padding:6px 12px;border-radius:10px;text-align:center;line-height:1.35}
+.timer{height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:left}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:13px 14px;font-size:15.5px;font-weight:500}
+.opt kbd{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--surface-2);color:var(--muted);font:600 12px var(--font-ui)}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.ok kbd{background:var(--good);color:var(--surface)}
+.opt.bad{border-color:var(--pom);background:var(--pom-soft)}
+.opt.bad kbd{background:var(--pom);color:var(--surface)}
+.opt.dim{opacity:.55}
+.fb{font-weight:700;font-size:14px}
+.fb.ok{color:var(--good)} .fb.bad{color:var(--pom)}
+.actions{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px}
+.actions button{border-radius:12px;padding:12px 8px;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--surface)}
+.actions .next{background:var(--pom);border-color:var(--pom);color:#fff}
+.gloss{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.gloss .tr{font-weight:700;font-size:16px}
+.gloss .ru{color:var(--muted);font-size:14px;margin-top:-4px}
+.gloss dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+.gloss dt{font-weight:600;color:var(--accent)}
+.gloss dd{margin:0;color:var(--ink);min-width:0}
+
+/* video */
+.vbanner{display:flex;flex-direction:column;gap:3px;text-align:left;border:0;border-radius:16px;padding:14px 16px;background:linear-gradient(115deg,#B8323C,#D9622F);color:#fff;box-shadow:0 10px 24px -16px rgba(150,40,30,.8)}
+.vbanner:hover{filter:brightness(1.05)}
+.vb-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.vb-title{font-family:var(--font-display);font-size:18px;font-weight:700}
+.vb-sub{font-size:13px;opacity:.9}
+.stage.video{aspect-ratio:16/9;background:#000}
+#ytwrap,#ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.shield{position:absolute;left:0;right:0;top:0;bottom:30%;cursor:pointer}
+.mask{position:absolute;left:0;right:0;bottom:0;height:30%;background:#0B1418;display:grid;place-items:center;color:#fff;font-weight:600;padding:0 14px;text-align:center;font-size:15px;line-height:1.35}
+.mask .muted{color:#9FB3B8;font-size:12.5px;font-weight:500}
+.playover{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);border:0;border-radius:99px;padding:12px 20px;background:rgba(255,255,255,.94);color:#111;font-weight:700;font-size:15px}
+.vmsg{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;color:#fff;background:#0B1418;font-size:14px;line-height:1.5}
+.src{font-size:13px;color:var(--muted)}
+.src a{color:var(--accent)}
+
+/* done */
+.done-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 18px;text-align:center;display:flex;flex-direction:column;gap:6px}
+.done-card h2{font-family:var(--font-display);font-size:22px;margin:0}
+.done-card .big{font-family:var(--font-display);font-size:42px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.done-card p{margin:0;color:var(--muted)}
+.miss{display:flex;flex-direction:column;gap:8px}
+.miss div{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--pom);border-radius:12px;padding:10px 12px}
+.miss b{display:block}
+.miss span{color:var(--muted);font-size:14px}
+
+/* scene animation */
+.m-open{opacity:0;transform-box:fill-box;transform-origin:center}
+.talking .spk .m-open{opacity:1;animation:talk .17s ease-in-out infinite alternate}
+.talking .spk .m-closed{opacity:0}
+@keyframes talk{from{transform:scaleY(.2)}to{transform:scaleY(1)}}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 4.4s infinite}
+.lis .eyes{animation-delay:1.9s}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.spk{animation:bob 3.8s ease-in-out infinite}
+.talking .spk{animation:nod .5s ease-in-out infinite alternate}
+.lis{animation:bob 4.6s ease-in-out infinite reverse}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+@keyframes nod{from{transform:translateY(0) rotate(0)}to{transform:translateY(-1.5px) rotate(-.6deg)}}
+.bubble{opacity:0;transition:opacity .2s}
+.talking .bubble{opacity:1}
+.bubble circle{animation:dot 1s infinite}
+.bubble circle:nth-child(3){animation-delay:.15s}.bubble circle:nth-child(4){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
+.gull{animation:fly 9s linear infinite}
+@keyframes fly{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+.ferry{animation:sail 14s ease-in-out infinite alternate}
+@keyframes sail{from{transform:translateX(0)}to{transform:translateX(-18px)}}
+.steam{animation:steam 2.4s ease-in-out infinite}
+@keyframes steam{0%{opacity:0;transform:translateY(2px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-8px)}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.talking .spk .m-open{opacity:1}}
+@media (max-width:420px){.actions{grid-template-columns:1fr 1fr}.actions .next{grid-column:1/-1}.brand h1{font-size:20px}}
+</style>
+
+<div class="app">
+  <!-- HOME -->
+  <section id="home" class="app">
+    <header class="top">
+      <div class="brand">
+        <h1>Турецкий <span>экран</span></h1>
+        <p>Смотри, слушай, выбирай верный перевод.</p>
+      </div>
+      <span class="pill" id="sceneCount">68 сцен</span>
+    </header>
+    <div class="tile" aria-hidden="true"></div>
+
+    <button type="button" class="vbanner" id="videoBtn">
+      <span class="vb-eyebrow">Новое · видео-режим</span>
+      <span class="vb-title">Настоящая турецкая речь ›</span>
+      <span class="vb-sub" id="vbSub">Фрагменты роликов Easy Turkish: погода, завтрак</span>
+    </button>
+
+    <div class="stats">
+      <div class="stat pts"><b id="stPts">0</b><small>Всего очков</small></div>
+      <div class="stat"><b id="stAcc">–</b><small>Точность</small></div>
+      <div class="stat"><b id="stRev">0</b><small>На повторение</small></div>
+    </div>
+
+    <div class="group">
+      <div class="label">Тема</div>
+      <div class="chips" id="topics"></div>
+    </div>
+    <div class="group">
+      <div class="label">Режим</div>
+      <div class="seg" id="modeSeg">
+        <button type="button" id="mode-nosub" data-v="nosub">Без субтитров</button>
+        <button type="button" id="mode-sub" data-v="sub">С субтитрами</button>
+      </div>
+    </div>
+    <div class="group">
+      <div class="label">Длина фразы</div>
+      <div class="seg" id="lenSeg">
+        <button type="button" id="len-all" data-v="all">Все</button>
+        <button type="button" id="len-k" data-v="k">Короткие</button>
+        <button type="button" id="len-o" data-v="o">Средние</button>
+        <button type="button" id="len-u" data-v="u">Длинные</button>
+      </div>
+    </div>
+    <div class="group">
+      <div class="label">Озвучка</div>
+      <div class="row">
+        <select id="voiceSel" aria-label="Голос"></select>
+      </div>
+      <div class="row">
+        <button type="button" class="btn" id="testVoice">▶ Прослушать</button>
+        <button type="button" class="btn" id="speedBtn">Скорость: обычная</button>
+      </div>
+      <p class="warn" id="noVoice" hidden>На этом устройстве не найден турецкий голос. Пока его нет, субтитры будут включены автоматически.</p>
+      <p class="hint">Для самого естественного звучания установите турецкий голос.
+        iPhone: Настройки › Универсальный доступ › Устный контент › Голоса › Турецкий › <b>Yelda (улучшенный)</b>.
+        Windows: Параметры › Время и язык › Речь › Добавить голоса › Türkçe. В браузере Edge есть голоса <b>Emel</b> и <b>Ahmet</b> (Natural). После установки перезапустите страницу.</p>
+    </div>
+
+    <div class="cta">
+      <button type="button" class="primary" id="startBtn">Начать · 10 сцен</button>
+      <button type="button" class="secondary" id="reviewBtn">Повторить ошибки</button>
+    </div>
+    <div class="foot" id="resetRow">
+      <button type="button" class="link" id="resetBtn">Сбросить прогресс</button>
+    </div>
+  </section>
+
+  <!-- PLAY -->
+  <section id="play" class="app" hidden>
+    <div class="bar">
+      <button type="button" id="exitBtn">✕ Выйти</button>
+      <span id="counter">1/10</span>
+      <span class="ptsnow" id="ptsNow">0 очков</span>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+    <div class="stage" id="stage">
+      <div id="art"></div>
+      <div id="ytwrap" hidden><div id="yt"></div></div>
+      <div class="shield" id="shield" hidden title="Повторить фрагмент"></div>
+      <div class="mask" id="mask" hidden><span id="maskTxt"></span></div>
+      <button type="button" class="playover" id="playOver" hidden>▶ Смотреть фрагмент</button>
+      <div class="vmsg" id="vmsg" hidden>Видео не загрузилось. Видео-режим работает на сайте с доступом к YouTube. Можно ответить по тексту.</div>
+      <span class="tag" id="tag"></span>
+      <div class="sub" id="sub" hidden></div>
+    </div>
+    <div class="timer"><i id="timer"></i></div>
+    <div class="fb" id="fb" hidden></div>
+    <div class="opts" id="opts"></div>
+    <div class="actions" id="actions" hidden>
+      <button type="button" id="againBtn">↻ Ещё раз</button>
+      <button type="button" id="slowBtn">Медленно</button>
+      <button type="button" class="next" id="nextBtn">Дальше →</button>
+    </div>
+    <div class="gloss" id="gloss" hidden></div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="app" hidden>
+    <div class="done-card">
+      <h2>Раунд окончен</h2>
+      <div class="big" id="doneScore">7/10</div>
+      <p id="doneLine"></p>
+    </div>
+    <div class="group" id="missWrap">
+      <div class="label">Фразы для повторения</div>
+      <div class="miss" id="missList"></div>
+    </div>
+    <div class="cta">
+      <button type="button" class="primary" id="againRound">Ещё 10 сцен</button>
+      <button type="button" class="secondary" id="doneReview">Повторить ошибки</button>
+      <button type="button" class="secondary" id="homeBtn">На главную</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+/* ---------- content ---------- */
+const TOPICS=[
+ ['all','Все'],['tanisma','Знакомство'],['kafe','Кафе и ресторан'],['carsi','Рынок и магазин'],
+ ['ulasim','Транспорт'],['otel','Отель и жильё'],['saglik','Аптека и врач'],['is','Работа и офис'],['ev','Дом и соседи']];
+const TAG=Object.fromEntries(TOPICS);
+const LV={k:{base:10,time:12},o:{base:15,time:16},u:{base:20,time:20}};
+const RAW=[
+// id, topic, length, speaker gender, Turkish, correct RU, distractor RU, glossary "tr=ru | tr=ru"
+['ta1','tanisma','k','f','Memnun oldum.','Приятно познакомиться.','Рада была вас видеть.','memnun=довольный, рад | oldum=я стал(а) — от olmak «быть, становиться»'],
+['ta2','tanisma','k','m','Adınız ne?','Как вас зовут?','Откуда вы?','ad=имя | -ınız=ваш | ne=что'],
+['ta3','tanisma','k','f','Nerelisiniz?','Откуда вы родом?','Где вы сейчас живёте?','nere=где, какое место | -li=родом из | -siniz=вы есть'],
+['ta4','tanisma','u','m',"Ben Rusya'dan geldim, iki yıldır İstanbul'da yaşıyorum.",'Я приехал из России и уже два года живу в Стамбуле.','Я приехал из России и через два года уеду из Стамбула.',"Rusya'dan=из России | iki yıldır=уже два года | yaşıyorum=живу"],
+['ta5','tanisma','o','f','Türkçeyi nerede öğrendiniz?','Где вы выучили турецкий?','Когда вы начали учить турецкий?','nerede=где | öğrendiniz=вы выучили — от öğrenmek'],
+['ta6','tanisma','o','m','Biraz yavaş konuşur musunuz?','Не могли бы вы говорить чуть медленнее?','Не могли бы вы говорить чуть громче?','biraz=немного | yavaş=медленно | konuşur musunuz=не поговорите ли (вежливая просьба)'],
+['ta7','tanisma','u','f','Hafta sonu ne yapıyorsun? Bize gelsene.','Что делаешь на выходных? Приходи к нам.','Что ты делал на выходных? Мы к тебе зайдём.','hafta sonu=выходные | bize=к нам | gelsene=приходи же (дружеское приглашение)'],
+['ta8','tanisma','o','m','Kusura bakmayın, geç kaldım.','Извините, я опоздал.','Извините, я пришёл слишком рано.','kusura bakmayın=извините (букв. «не смотрите на недостаток») | geç kalmak=опаздывать'],
+['ta9','tanisma','o','f','Görüşürüz, kendine iyi bak!','Увидимся, береги себя!','Увидимся, хорошо тебе отдохнуть!','görüşürüz=увидимся | kendine iyi bak=береги себя (букв. «хорошо смотри за собой»)'],
+
+['ka1','kafe','k','f','Hesabı alabilir miyiz?','Можно нам счёт?','Можно нам меню?','hesap=счёт | alabilir miyiz=можем ли мы взять'],
+['ka2','kafe','k','m','Bir çay, şekersiz lütfen.','Один чай без сахара, пожалуйста.','Один чай с сахаром, пожалуйста.','şeker=сахар | -siz=без | lütfen=пожалуйста'],
+['ka3','kafe','k','m','Ne arzu edersiniz?','Что желаете?','Что вы посоветуете?','arzu etmek=желать (вежливо, так говорят официанты)'],
+['ka4','kafe','o','f','Bugünün çorbası mercimek, çok tavsiye ederim.','Суп дня — чечевичный, очень рекомендую.','Чечевичный суп сегодня закончился, извините.','çorba=суп | mercimek=чечевица | tavsiye ederim=рекомендую'],
+['ka5','kafe','o','m','Paket mi olsun, burada mı yiyeceksiniz?','Вам с собой или будете есть здесь?','Вам упаковать или принести ещё?','paket=с собой, навынос | burada=здесь | yiyeceksiniz=вы будете есть'],
+['ka6','kafe','k','f','Kartla ödeyebilir miyim?','Можно оплатить картой?','Можно оплатить наличными?','kartla=картой | ödemek=платить | nakit=наличные'],
+['ka7','kafe','u','m','Maalesef mutfak kapandı ama tatlı ve içecek hâlâ var.','К сожалению, кухня уже закрыта, но десерты и напитки ещё есть.','К сожалению, десерты закончились, но кухня ещё работает.','maalesef=к сожалению | mutfak=кухня | tatlı=десерт | hâlâ=всё ещё'],
+['ka8','kafe','u','f','Cumartesi akşamı için dört kişilik bir masa ayırtmak istiyorum.','Я хочу забронировать столик на четверых на вечер субботы.','Я хочу забронировать столик на троих на вечер воскресенья.','cumartesi=суббота | dört kişilik=на четверых | ayırtmak=бронировать'],
+['ka9','kafe','k','m','Afiyet olsun!','Приятного аппетита!','Будьте здоровы!','afiyet olsun=приятного аппетита (говорят и до, и после еды)'],
+
+['ca1','carsi','k','f','Bu ne kadar?','Сколько это стоит?','Что это такое?','bu=это | ne kadar=сколько'],
+['ca2','carsi','o','m','Domatesin kilosu kaç lira?','Сколько лир стоит килограмм помидоров?','Сколько килограммов помидоров вам нужно?','domates=помидор | kilo=килограмм | kaç=сколько'],
+['ca3','carsi','o','f','Çok pahalı, biraz indirim yapar mısınız?','Очень дорого, сделаете небольшую скидку?','Очень дёшево, можно взять побольше?','pahalı=дорогой | ucuz=дешёвый | indirim=скидка'],
+['ca4','carsi','u','m','Buyrun abla, taze taze, hepsi bu sabah geldi!','Пожалуйста, сестрица, всё свежее, всё привезли сегодня утром!','Пожалуйста, сестрица, всё свежее, но привезли вчера вечером!','abla=«сестрица», вежливое обращение к женщине | taze=свежий | bu sabah=сегодня утром'],
+['ca5','carsi','o','f','Bunun bir büyük bedeni var mı?','Есть это на размер больше?','Есть это другого цвета?','beden=размер одежды | büyük=большой | renk=цвет'],
+['ca6','carsi','k','m','Poşet ister misiniz?','Вам нужен пакет?','Вам нужен чек?','poşet=пакет | fiş=чек | ister misiniz=хотите ли'],
+['ca7','carsi','u','f','İki kilo elma, bir de yarım kilo peynir verir misiniz?','Дайте, пожалуйста, два кило яблок и ещё полкило сыра.','Дайте, пожалуйста, полкило яблок и ещё два кило сыра.','elma=яблоко | yarım=половина | peynir=сыр'],
+['ca8','carsi','o','f','Deneyebilir miyim? Kabin nerede?','Можно примерить? Где примерочная?','Можно вернуть? Где касса?','denemek=пробовать, примерять | kabin=примерочная | kasa=касса'],
+['ca9','carsi','k','m','Üstü kalsın.','Сдачи не надо.','Подождите сдачу.','üstü=сдача (букв. «то, что сверху») | kalsın=пусть останется'],
+
+['ul1','ulasim','o','f',"Bu otobüs Taksim'e gider mi?",'Этот автобус идёт до Таксима?','Этот автобус идёт из Таксима?',"Taksim'e=в Таксим (-e «куда») | Taksim'den=из Таксима | gider mi=идёт ли"],
+['ul2','ulasim','o','m','Bir sonraki durakta inecek misiniz?','Вы выходите на следующей остановке?','Вы сели на прошлой остановке?','sonraki=следующий | durak=остановка | inmek=выходить'],
+['ul3','ulasim','o','f',"İstanbulkart'a nereden para yükleyebilirim?",'Где можно пополнить Истанбулкарт?','Где можно купить Истанбулкарт?','nereden=откуда, где | yüklemek=пополнять, загружать | satın almak=купить'],
+['ul4','ulasim','u','m','Vapur on dakika sonra kalkıyor, acele edelim.','Паром отходит через десять минут, давай поторопимся.','Паром опоздал на десять минут, давай подождём.','vapur=паром | kalkmak=отправляться | acele etmek=спешить'],
+['ul5','ulasim','o','f','Sağa dönün, sonra dümdüz devam edin.','Поверните направо, потом идите прямо.','Поверните налево, потом идите прямо.','sağ=право | sol=лево | dümdüz=прямо-прямо'],
+['ul6','ulasim','o','m','Taksimetreyi açar mısınız?','Включите, пожалуйста, счётчик.','Откройте, пожалуйста, багажник.','taksimetre=счётчик в такси | açmak=включать, открывать | bagaj=багажник'],
+['ul7','ulasim','u','f','Metro hattında arıza var, lütfen otobüslere aktarma yapın.','На линии метро неисправность, пожалуйста, пересядьте на автобусы.','Линия метро закрыта на ремонт, автобусы сегодня не ходят.','hat=линия | arıza=неисправность, поломка | aktarma=пересадка'],
+['ul8','ulasim','k','m','Burası boş mu?','Здесь свободно?','Здесь занято?','burası=это место | boş=свободный, пустой | dolu=занятый'],
+['ul9','ulasim','o','m','Trafik çok yoğun, yarım saat sürer.','Пробки очень плотные, ехать полчаса.','Пробок нет, доедем за пять минут.','yoğun=плотный, загруженный | yarım saat=полчаса | sürmek=длиться'],
+
+['ot1','otel','o','f','Rezervasyonum var, adım Anna.','У меня бронь, меня зовут Анна.','У меня нет брони, меня зовут Анна.','rezervasyon=бронь | -um var=у меня есть | adım=моё имя'],
+['ot2','otel','k','m','Kahvaltı saat kaçta?','Во сколько завтрак?','Завтрак включён в стоимость?','kahvaltı=завтрак | saat kaçta=во сколько'],
+['ot3','otel','o','f','Odadaki klima çalışmıyor.','В номере не работает кондиционер.','В номере не работает душ.','oda=комната, номер | klima=кондиционер | çalışmıyor=не работает'],
+['ot4','otel','u','m','Çıkış saat on ikide, bavullarınızı resepsiyonda bırakabilirsiniz.','Выезд в двенадцать, чемоданы можно оставить на ресепшене.','Заезд в двенадцать, чемоданы можно оставить в номере.','çıkış=выезд | giriş=заезд | bavul=чемодан | bırakmak=оставлять'],
+['ot5','otel','k','f','İnternet şifresi ne?','Какой пароль от интернета?','Интернет в номере платный?','şifre=пароль | ne=что, какой'],
+['ot6','otel','o','m','Ev sahibi kirayı ayın beşine kadar istiyor.','Хозяин квартиры хочет арендную плату до пятого числа.','Хозяин квартиры хочет поднять плату с пятого числа.','ev sahibi=хозяин жилья | kira=аренда, плата | ayın beşi=пятое число'],
+['ot7','otel','u','f','Depozito olarak iki kira alıyoruz, faturalar size ait.','Залог берём в размере двух месячных плат, коммунальные счета — на вас.','Залог не берём, коммунальные счета включены в плату.','depozito=залог | fatura=счёт за коммуналку | size ait=на вас, ваше'],
+['ot8','otel','o','m','Bir gece daha kalabilir miyim?','Можно остаться ещё на одну ночь?','Можно выехать на одну ночь раньше?','gece=ночь | daha=ещё | kalmak=оставаться'],
+
+['sa1','saglik','k','f','Başım çok ağrıyor.','У меня сильно болит голова.','У меня сильно болит живот.','baş=голова | karın=живот | ağrımak=болеть'],
+['sa2','saglik','o','m','Bu ilacı reçetesiz alabilir miyim?','Можно купить это лекарство без рецепта?','Можно принимать это лекарство без еды?','ilaç=лекарство | reçete=рецепт | -siz=без'],
+['sa3','saglik','o','f','Günde iki kez, yemekten sonra için.','Принимайте два раза в день, после еды.','Принимайте два раза в день, перед едой.','günde=в день | yemekten sonra=после еды | yemekten önce=перед едой'],
+['sa4','saglik','u','m','Ateşiniz var mı? Ne zamandır öksürüyorsunuz?','У вас есть температура? Как давно вы кашляете?','У вас есть температура? Почему вы не пришли раньше?','ateş=жар, температура | ne zamandır=как давно | öksürmek=кашлять'],
+['sa5','saglik','o','f','Nöbetçi eczane nerede?','Где дежурная аптека?','Где ближайшая больница?','nöbetçi=дежурный | eczane=аптека | hastane=больница'],
+['sa6','saglik','u','f','Randevu almak istiyorum, en erken hangi gün müsait?','Я хочу записаться на приём. Какой ближайший свободный день?','Я хочу отменить приём. Когда можно перезвонить?','randevu=запись, приём | en erken=самый ранний | müsait=свободный'],
+['sa7','saglik','k','m','Geçmiş olsun!','Выздоравливайте!','С возвращением!','geçmiş olsun=пусть пройдёт; так желают скорейшего выздоровления'],
+['sa8','saglik','k','f','Alerjiniz var mı?','У вас есть аллергия?','У вас есть страховка?','alerji=аллергия | sigorta=страховка'],
+
+['is1','is','o','f','Toplantı yarına ertelendi.','Совещание перенесли на завтра.','Совещание отменили, завтра его не будет.','toplantı=совещание | yarın=завтра | ertelemek=переносить | iptal=отмена'],
+['is2','is','o','m','Raporu cumaya kadar bitirebilir misin?','Сможешь закончить отчёт к пятнице?','Сможешь начать отчёт в пятницу?','rapor=отчёт | cuma=пятница | -e kadar=до | bitirmek=заканчивать'],
+['is3','is','o','f','Bugün evden çalışıyorum.','Сегодня я работаю из дома.','Сегодня я иду домой пораньше.','evden=из дома | çalışmak=работать'],
+['is4','is','u','m','Mesai altıda bitiyor ama bugün biraz kalmam lazım.','Рабочий день заканчивается в шесть, но сегодня мне нужно немного задержаться.','Рабочий день начинается в шесть, но сегодня мне можно уйти пораньше.','mesai=рабочее время | bitmek=заканчиваться | lazım=нужно'],
+['is5','is','k','f','Kolay gelsin!','Лёгкой работы! (Бог в помощь)','Хорошего отдыха!','kolay gelsin=пусть будет легко; говорят тому, кто работает'],
+['is6','is','u','m','Sözleşmeyi imzalamadan önce avukatımıza göstermek istiyoruz.','Прежде чем подписать договор, мы хотим показать его нашему юристу.','Мы уже подписали договор и показали его нашему юристу.','sözleşme=договор | imzalamadan önce=прежде чем подписать | avukat=юрист, адвокат'],
+['is7','is','o','f','Maaşlar ayın on beşinde yatıyor.','Зарплата приходит пятнадцатого числа.','Зарплату задерживают на пятнадцать дней.','maaş=зарплата | yatmak=здесь: поступать на счёт | ayın on beşi=пятнадцатое число'],
+['is8','is','k','m','Bir dakikanız var mı?','У вас есть минутка?','Вы опоздали на минуту?','dakika=минута | -nız var mı=есть ли у вас'],
+
+['ev1','ev','u','f','Komşu, sesiniz biraz yüksek, çocuklar uyuyor.','Сосед, у вас немного громко, дети спят.','Сосед, у вас тихо, дети уже проснулись.','komşu=сосед | ses=звук, голос | yüksek=высокий, громкий | uyumak=спать'],
+['ev2','ev','o','m','Kapıcı çöpleri her akşam topluyor.','Консьерж каждый вечер забирает мусор.','Консьерж каждое утро приносит хлеб.','kapıcı=консьерж, дворник в доме | çöp=мусор | her akşam=каждый вечер'],
+['ev3','ev','u','f','Annem akşama dolma yapacak, sen de gel.','Мама вечером приготовит долму, приходи и ты.','Мама вчера приготовила долму, но ты не пришёл.','annem=моя мама | akşama=к вечеру | yapacak=сделает | sen de=и ты'],
+['ev4','ev','u','m','Sular kesik, saat üçe kadar gelmeyecekmiş.','Воду отключили, говорят, до трёх часов не дадут.','Воду дали, говорят, с трёх часов будет горячая.','su kesik=воды нет, отключена | -e kadar=до | -mış=«говорят», пересказ чужих слов'],
+['ev5','ev','k','f','Ellerine sağlık!','Спасибо, очень вкусно! (букв. «здоровья твоим рукам»)','Помой руки перед едой!','el=рука | sağlık=здоровье; так благодарят за еду или работу'],
+['ev6','ev','o','m','Anahtarımı içeride unuttum.','Я забыл ключ внутри.','Я потерял ключ на улице.','anahtar=ключ | içeride=внутри | unutmak=забывать | kaybetmek=терять'],
+['ev7','ev','k','f','Hoş geldiniz!','Добро пожаловать!','Счастливого пути!','hoş geldiniz=добро пожаловать | ответ: hoş bulduk'],
+['ev8','ev','u','f','Ayakkabılarını çıkarır mısın? Sana terlik vereyim.','Снимешь обувь? Я дам тебе тапочки.','Обувь можно не снимать, тапочки не нужны.','ayakkabı=обувь | çıkarmak=снимать | terlik=тапочки | vereyim=дам-ка']
+];
+// Real clips: id, YouTube id, start s, end s, topic, Turkish (from the video's own captions), correct RU, distractor RU, glossary
+const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак'};
+const RAWV=[
+['w1','mGV2j3rmWHg',0.1,4.2,'Погода','Emine, bugün hava biraz soğuk, değil mi?','Эмине, сегодня немного холодно, правда?','Эмине, сегодня довольно жарко, правда?','hava=погода | biraz=немного | soğuk=холодный | değil mi?=не так ли?'],
+['w2','mGV2j3rmWHg',8.5,13.0,'Погода','Sabah evden çıkarken gerçekten çok üşüdüm.','Утром, выходя из дома, я очень замёрзла.','Утром, выходя из дома, я забыла зонт.','çıkarken=выходя | gerçekten=по-настоящему | üşümek=мёрзнуть'],
+['w3','mGV2j3rmWHg',79.3,86.5,'Погода','Peki, bugün hava nasıl? Hava serin ve yağmurlu. Ama yağmur yağmıyor.','А какая сегодня погода? — Прохладно и дождливо, но дождь не идёт.','А какая сегодня погода? — Жарко и солнечно, на небе ни облака.','serin=прохладный | yağmurlu=дождливый | yağmur yağmıyor=дождь не идёт'],
+['w4','mGV2j3rmWHg',89.0,95.0,'Погода','Akşam yağmur yağabilir. Nereden biliyorsun? Hava durumuna baktım.','Вечером может пойти дождь. — Откуда знаешь? — Посмотрела прогноз погоды.','Вечером дождя не будет. — Откуда знаешь? — Посмотрела в окно.','yağabilir=может пойти | nereden=откуда | hava durumu=прогноз погоды'],
+['w5','mGV2j3rmWHg',96.9,101.7,'Погода','Akşam yağmur bekleniyor. Şemsiyemi yanıma almalıyım.','Вечером ожидается дождь. Нужно взять с собой зонт.','Вечером дождь закончится. Зонт можно оставить дома.','bekleniyor=ожидается | şemsiye=зонт | yanıma almak=взять с собой | -malıyım=я должна'],
+['w6','mGV2j3rmWHg',102.5,109.8,'Погода','Yarın nasıl olacakmış? Yarın hava daha soğuk olacakmış. Kaç dereceymiş?','Какой, говорят, будет погода завтра? — Говорят, холоднее. — Сколько градусов?','Какая погода была вчера? — Вчера было теплее. — Сколько было градусов?','yarın=завтра | olacakmış=говорят, будет (-mış — пересказ) | derece=градус'],
+['w7','mGV2j3rmWHg',228.3,233.4,'Погода','Bu arada kahvem bitti. Benim de bitmiş. Ben kahveleri tazeleyeyim.','Кстати, мой кофе закончился. — Мой тоже. — Давай я принесу ещё кофе.','Кстати, мой кофе остыл. — Мой тоже. — Давай закажем чай.','bu arada=кстати | bitti=закончился | tazelemek=освежить, подлить'],
+['w8','mGV2j3rmWHg',349.6,356.3,'Погода','Hava çok sıcak oluyor. Çok nemli oluyor. Dışarıya çıktığında hemen terliyorsun.','Очень жарко и очень влажно. Выходишь на улицу — и сразу потеешь.','Очень жарко, но сухо. Выходишь на улицу — и сразу хочется гулять.','sıcak=жаркий | nemli=влажный | hemen=сразу | terlemek=потеть'],
+['w9','mGV2j3rmWHg',402.3,406.8,'Погода','Kar yağarsa çok mutlu oluyorum. İstanbul ve kar mı?','Если идёт снег, я очень радуюсь. — Стамбул и снег?','Когда идёт снег, мне грустно. — В Стамбуле нет снега?','kar=снег | yağarsa=если пойдёт | mutlu=счастливый'],
+['w10','mGV2j3rmWHg',473.8,482.8,'Погода','Peki ideal hava senin için nasıl? Güneşli, açık ve yaklaşık 27 derece.','А какая погода для тебя идеальная? — Солнечно, ясно и около 27 градусов.','А какая погода для тебя идеальная? — Пасмурно, прохладно и около 17 градусов.','güneşli=солнечный | açık=ясный | yaklaşık=примерно'],
+['b1','QY_CsrSxk88',7.8,11.2,'Завтрак','Türkler gerçekten sabahları ne yiyor?','Что турки на самом деле едят по утрам?','Что турки на самом деле пьют по вечерам?','gerçekten=на самом деле | sabahları=по утрам | yemek=есть'],
+['b2','QY_CsrSxk88',50.2,55.2,'Завтрак','Ben yumurta yerim, simit yerim.','Я ем яйца, ем симит.','Я не ем яйца, только симит.','yumurta=яйцо | yerim=я ем (обычно) | simit=бублик с кунжутом'],
+['b3','QY_CsrSxk88',283.3,287.0,'Завтрак','Peki kahvaltıyı kim hazırlıyor? Tabii ki de ben.','А кто готовит завтрак? — Конечно же, я.','А кто моет посуду после завтрака? — Конечно же, муж.','kahvaltı=завтрак | kim=кто | hazırlamak=готовить'],
+['b4','QY_CsrSxk88',294.6,301.0,'Завтрак',"Peki genellikle saat kaçta kahvaltı yapıyorsunuz? Sabah 9'la 10 arası.",'А во сколько вы обычно завтракаете? — Утром, между девятью и десятью.','А где вы обычно завтракаете? — Дома, всей семьёй.','genellikle=обычно | saat kaçta=во сколько | arası=между'],
+['b5','QY_CsrSxk88',301.0,308.7,'Завтрак',"Ya şimdi hafta içi çalıştığımız için genellikle saat 9. Ama hafta sonları saat 11-12'yi buluyor.",'В будни мы работаем, поэтому обычно в девять. А по выходным доходит до 11–12.','По выходным мы работаем, поэтому в девять. А в будни — в 11–12.','hafta içi=будни | hafta sonu=выходные | çalıştığımız için=потому что мы работаем'],
+['b6','QY_CsrSxk88',225.5,230.7,'Завтрак','Ben size kahvaltıya gelmek istedim. Gelin vallahi, beklerim.','Мне захотелось прийти к вам на завтрак. — Приходите, честное слово, буду ждать!','Приглашаю вас к себе на завтрак. — Спасибо, но я не смогу.','size=к вам | gelmek=приходить | vallahi=ей-богу, честное слово | beklerim=буду ждать'],
+['b7','QY_CsrSxk88',412.7,417.7,'Завтрак','Yani olmazsa olmazı tabii çay, kesin olması lazım.','Без чего никак — это, конечно, чай, он обязательно должен быть.','Чай не обязателен, главное — кофе.','olmazsa olmaz=то, без чего никак | kesin=обязательно | lazım=нужно'],
+['b8','QY_CsrSxk88',433.8,441.5,'Завтрак','Menemen tabii ki de var. Evet, menemen bence de. Ama soğanlı mı, soğansız mı? Tabii ki soğansız bence.','Ещё, конечно, менемен. — Да, по-моему тоже. — А с луком или без? — Конечно, без лука!','Ещё, конечно, менемен. — Да, по-моему тоже. — А с луком или без? — Конечно, с луком!','menemen=яичница с помидорами и перцем | soğanlı=с луком | soğansız=без лука'],
+['b9','QY_CsrSxk88',536.0,538.5,'Завтрак','Ben de peynirsiz asla kahvaltı yapamam.','Я тоже никогда не могу завтракать без сыра.','Я тоже никогда не ем сыр на завтрак.','peynir=сыр | -siz=без | asla=никогда | yapamam=не могу'],
+['b10','QY_CsrSxk88',868.8,873.5,'Завтрак','Röportajları yaparken bizim de karnımız epey acıktı.','Пока мы брали интервью, мы тоже здорово проголодались.','Пока мы брали интервью, мы успели позавтракать.','röportaj=интервью | yaparken=пока делали | karnımız acıktı=мы проголодались | epey=изрядно']
+];
+const CLIPS=RAWV.map(a=>{const d=a[3]-a[2];return {kind:'clip',id:a[0],vid:a[1],s:a[2],e:a[3],topic:a[4],t:a[5],r:a[6],d:a[7],lv:d<4.5?'k':d<7?'o':'u',w:a[8].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}});
+const SCENES=RAW.map(a=>({id:a[0],tp:a[1],lv:a[2],g:a[3],t:a[4],r:a[5],d:a[6],w:a[7].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}));
+const BYID=Object.fromEntries(SCENES.concat(CLIPS).map(s=>[s.id,s]));
+
+/* ---------- storage ---------- */
+const KEY='tr-ekran-v1';
+let P={pts:0,ans:0,cor:0,review:[],seen:[],seenV:[],topic:'all',mode:'nosub',len:'all',voice:'auto',speed:'normal'};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)P=Object.assign(P,s)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+
+const $=id=>document.getElementById(id);
+function plural(n,a,b,c){const m10=n%10,m100=n%100;if(m10===1&&m100!==11)return a;if(m10>=2&&m10<=4&&(m100<10||m100>=20))return b;return c}
+const ochki=n=>n+' '+plural(n,'очко','очка','очков');
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+/* ---------- speech ---------- */
+const HAS_TTS='speechSynthesis' in window;
+let VOICES=[];
+const FEM=/yelda|seda|emel|filiz|female|kadın|zeynep|aylin|google/i, MAL=/tolga|ahmet|cem|male|erkek/i;
+function rank(v){let s=0;if(/natural|neural|enhanced|premium|online|geliştirilmiş/i.test(v.name))s+=3;if(/google/i.test(v.name))s+=1;if(v.localService===false)s+=1;return s}
+function loadVoices(){
+  if(!HAS_TTS)return;
+  VOICES=speechSynthesis.getVoices().filter(v=>/^tr/i.test(v.lang)).sort((a,b)=>rank(b)-rank(a));
+  const sel=$('voiceSel');sel.innerHTML='<option value="auto">Автоматически (лучший голос)</option>'+VOICES.map(v=>`<option value="${esc(v.name)}">${esc(v.name)}</option>`).join('');
+  sel.value=VOICES.some(v=>v.name===P.voice)?P.voice:'auto';
+  $('noVoice').hidden=VOICES.length>0;
+}
+function voiceFor(g){
+  if(P.voice!=='auto'){const v=VOICES.find(v=>v.name===P.voice);if(v)return v}
+  if(!VOICES.length)return null;
+  const re=g==='m'?MAL:FEM, other=g==='m'?FEM:MAL;
+  return VOICES.find(v=>re.test(v.name)&&!other.test(v.name))||VOICES.find(v=>re.test(v.name))||VOICES[0];
+}
+const RATES={slow:.7,normal:.95,fast:1.15};
+const SPEEDLBL={slow:'медленная',normal:'обычная',fast:'быстрая'};
+let speakTok=0;
+function speak(text,g,rate,onEnd){
+  const tok=++speakTok;const stage=$('stage');
+  const finish=()=>{if(tok!==speakTok)return;speakTok++;stage.classList.remove('talking');onEnd&&onEnd()};
+  stage.classList.add('talking');
+  const est=Math.max(1400,text.length*80/rate)+900;
+  if(!HAS_TTS||!VOICES.length){setTimeout(finish,Math.min(est,2500));return}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='tr-TR';u.rate=rate;
+  const v=voiceFor(g);if(v)u.voice=v;
+  const sameVoice=voiceFor('f')===voiceFor('m');
+  u.pitch=(g==='m'&&sameVoice&&v&&!MAL.test(v.name))?.8:1;
+  u.onend=finish;u.onerror=finish;
+  setTimeout(finish,est*1.6);
+  speechSynthesis.speak(u);
+}
+function stopSpeech(){speakTok++;$('stage').classList.remove('talking');if(HAS_TTS)speechSynthesis.cancel();stopVideo()}
+
+/* ---------- YouTube clips ---------- */
+let ytLoad=null,YTP=null,ytPoll=0;
+function loadYT(){
+  if(window.YT&&window.YT.Player)return Promise.resolve();
+  if(ytLoad)return ytLoad;
+  ytLoad=new Promise((res,rej)=>{
+    const prev=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=()=>{prev&&prev();res()};
+    const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.onerror=()=>{ytLoad=null;rej(new Error('blocked'))};
+    document.head.appendChild(s);setTimeout(()=>{if(!(window.YT&&window.YT.Player)){ytLoad=null;rej(new Error('timeout'))}},9000);
+  });
+  return ytLoad;
+}
+function stopVideo(){clearInterval(ytPoll);try{YTP&&YTP.pauseVideo&&YTP.pauseVideo()}catch(e){}}
+function playClip(sc,rate,onEnd){
+  clearInterval(ytPoll);$('playOver').hidden=true;
+  const go=()=>{
+    try{if(YTP.__vid!==sc.vid){YTP.loadVideoById({videoId:sc.vid,startSeconds:sc.s});YTP.__vid=sc.vid}else{YTP.seekTo(sc.s,true);YTP.playVideo()}}catch(e){}
+    const t0=Date.now();let started=false;
+    ytPoll=setInterval(()=>{
+      let t=0,st=-1;try{t=YTP.getCurrentTime();st=YTP.getPlayerState()}catch(e){}
+      if(st===1&&!started){started=true;try{YTP.setPlaybackRate(rate||1)}catch(e){}}
+      if(!started&&Date.now()-t0>3000)$('playOver').hidden=false;
+      if(started&&t>=sc.e){clearInterval(ytPoll);try{YTP.pauseVideo()}catch(e){}onEnd&&onEnd()}
+    },100);
+  };
+  if(YTP&&YTP.__ready){go();return}
+  if(!YTP){
+    YTP=new YT.Player('yt',{host:'https://www.youtube-nocookie.com',width:'100%',height:'100%',videoId:sc.vid,
+      playerVars:{controls:0,disablekb:1,rel:0,playsinline:1,iv_load_policy:3,fs:0,cc_load_policy:0,start:Math.floor(sc.s)},
+      events:{onReady:()=>{YTP.__ready=true;YTP.__vid=sc.vid;YTP.__pending&&YTP.__pending()}}});
+  }
+  YTP.__pending=go;
+}
+function showClip(sc){
+  $('stage').classList.add('video');$('art').hidden=true;$('sub').hidden=true;
+  $('ytwrap').hidden=false;$('mask').hidden=false;$('shield').hidden=false;$('vmsg').hidden=true;
+  $('maskTxt').innerHTML=P.mode==='sub'?esc(sc.t):'<span class="muted">Субтитры скрыты · слушайте</span>';
+  $('tag').textContent='Видео · '+sc.topic;
+  loadYT().then(()=>playClip(sc,1,startTimer)).catch(()=>{$('vmsg').hidden=false;$('maskTxt').textContent=sc.t;startTimer()});
+}
+function resetStage(){
+  $('stage').classList.remove('video');$('art').hidden=false;
+  for(const id of ['ytwrap','mask','shield','playOver','vmsg'])$(id).hidden=true;
+}
+function replay(rate){
+  const sc=R&&R.list[R.i];if(!sc)return;
+  const cb=R.answered?null:startTimer;
+  if(sc.kind==='clip'){if(window.YT&&window.YT.Player)playClip(sc,rate||1,cb)}
+  else speak(sc.t,sc.g,rate||RATES[P.speed],cb);
+}
+
+/* ---------- scene art ---------- */
+function seeded(str){let h=1779033703;for(const c of str)h=Math.imul(h^c.charCodeAt(0),3432918353),h=h<<13|h>>>19;return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296}}
+const pick=(r,a)=>a[Math.floor(r()*a.length)];
+function look(r,g,opts={}){
+  return {g,skin:pick(r,['#F3CCA8','#E4B08A','#C98F67','#F6D7BE','#B97C55']),hair:pick(r,['#2A1C15','#47301F','#6E4428','#151515','#A26A35']),
+    shirt:opts.shirt||pick(r,['#2F6F8F','#B5443B','#3D7A58','#6E4F94','#C9852D','#33598F','#8C3D5E']),
+    style:g==='f'?pick(r,['long','bob','bun']):'short',stache:g==='m'&&r()<.35,glasses:r()<.2,coat:!!opts.coat};
+}
+function person(x,y,s,k,cls){
+  const fTop='<path d="M-28 -106 Q-27 -137 0 -137 Q27 -137 28 -106 Q14 -123 -3 -121 Q-18 -119 -28 -106Z" fill="'+k.hair+'"/>';
+  let back='',top='';
+  if(k.style==='long'){back=`<rect x="-33" y="-138" width="66" height="86" rx="30" fill="${k.hair}"/>`;top=fTop}
+  else if(k.style==='bob'){back=`<rect x="-32" y="-137" width="64" height="58" rx="26" fill="${k.hair}"/>`;top=fTop}
+  else if(k.style==='bun'){top=fTop+`<circle cx="0" cy="-139" r="11" fill="${k.hair}"/>`}
+  else top=`<path d="M-27 -103 Q-30 -137 0 -137 Q30 -137 27 -103 Q24 -119 13 -122 Q0 -117 -13 -122 Q-24 -119 -27 -103Z" fill="${k.hair}"/>`;
+  const stache=k.stache?`<path d="M-11 -93 Q0 -100 11 -93 Q0 -90 -11 -93Z" fill="${k.hair}"/>`:'';
+  const glasses=k.glasses?`<g fill="none" stroke="#25221f" stroke-width="1.7"><circle cx="-10" cy="-103" r="7"/><circle cx="10" cy="-103" r="7"/><path d="M-3 -103h6"/></g>`:'';
+  const coat=k.coat?' stroke="#C9D6D3" stroke-width="2"':'';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${cls}">${back}
+  <path d="M-44 0V-36Q-44 -68 0 -70Q44 -68 44 -36V0Z" fill="${k.shirt}"${coat}/>
+  <path d="M-11 -69L0 -57L11 -69" fill="none" stroke="rgba(0,0,0,.2)" stroke-width="2"/>
+  <rect x="-8" y="-83" width="16" height="17" rx="4" fill="${k.skin}"/>
+  <ellipse cx="-27" cy="-101" rx="4.5" ry="7" fill="${k.skin}"/><ellipse cx="27" cy="-101" rx="4.5" ry="7" fill="${k.skin}"/>
+  <ellipse cx="0" cy="-104" rx="27" ry="31" fill="${k.skin}"/>${top}
+  <g class="eyes"><ellipse cx="-10" cy="-103" rx="3" ry="3.8" fill="#1f1a17"/><ellipse cx="10" cy="-103" rx="3" ry="3.8" fill="#1f1a17"/></g>
+  <path d="M-15 -112q5 -3 10 0M5 -112q5 -3 10 0" stroke="${k.hair}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-17" cy="-92" rx="5" ry="3" fill="#E5786F" opacity=".28"/><ellipse cx="17" cy="-92" rx="5" ry="3" fill="#E5786F" opacity=".28"/>
+  ${glasses}${stache}
+  <path class="m-closed" d="M-6 -86Q0 -82 6 -86" stroke="#7A3B2E" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <ellipse class="m-open" cx="0" cy="-85" rx="5.5" ry="4.2" fill="#6B2A24"/></g></g>`;
+}
+const teaGlass=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="1" rx="10" ry="2.6" fill="#E9E2D6"/><path d="M-5 0h10q-3 -6 -1 -10q3 -5 1 -13h-10q-2 8 1 13q2 4 -1 10z" fill="#B4442A" fill-opacity=".85" stroke="#fff" stroke-opacity=".5"/></g>`;
+const simit=(x,y)=>`<g><circle cx="${x}" cy="${y}" r="11" fill="none" stroke="#C4843A" stroke-width="7"/><g fill="#F6E5BF">${[0,1,2,3,4,5,6,7].map(i=>`<circle cx="${(x+11*Math.cos(i*.8)).toFixed(1)}" cy="${(y+11*Math.sin(i*.8)).toFixed(1)}" r="1"/>`).join('')}</g></g>`;
+const steam=(x,y)=>`<path class="steam" d="M${x} ${y}q-3 -4 0 -8q3 -4 0 -8" stroke="#fff" stroke-width="1.6" fill="none" opacity=".6"/>`;
+const skyline=(c)=>`<g fill="${c}"><rect x="300" y="78" width="16" height="70"/><path d="M296 80l12 -26 12 26z"/><rect x="198" y="118" width="60" height="30"/><path d="M200 118q28 -36 56 0z"/><rect x="190" y="88" width="3" height="60"/><rect x="263" y="88" width="3" height="60"/><path d="M189 90l2.5 -10 2.5 10zM262 90l2.5 -10 2.5 10z"/><rect x="330" y="110" width="70" height="38"/><rect x="150" y="124" width="40" height="24"/></g>`;
+
+const BG={
+ tanisma:{L:[305,214,.82],back:`<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE2EA"/><stop offset="1" stop-color="#EAF5F2"/></linearGradient></defs>
+  <rect width="400" height="250" fill="url(#sk)"/>${skyline('#8FA9B2')}<rect y="146" width="400" height="20" fill="#5FA6B8"/>
+  <rect y="166" width="400" height="84" fill="#D9C8A6"/><g fill="#5E9A5A"><circle cx="20" cy="30" r="40"/><circle cx="70" cy="10" r="34"/><circle cx="380" cy="18" r="30" fill="#6EA968"/></g>
+  <rect x="150" y="24" width="98" height="26" rx="5" fill="#2D5A3D"/><text x="199" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#F4E8C9">Çay Bahçesi</text>`,
+  front:`<ellipse cx="215" cy="205" rx="42" ry="9" fill="#B5462F"/><rect x="212" y="205" width="6" height="45" fill="#7A3324"/>${teaGlass(200,203,.9)}${teaGlass(228,203,.9)}${steam(200,180)}`},
+ kafe:{L:[300,196,.78],back:`<rect width="400" height="250" fill="#EFDFC8"/><rect y="150" width="400" height="100" fill="#D8C2A3"/>
+  <g fill="#2E8B9A">${Array.from({length:20},(_,i)=>`<path d="M${i*20+10} 136l6 6-6 6-6-6z"/>`).join('')}</g>
+  <rect x="205" y="18" width="182" height="40" rx="6" fill="#23443A"/><text x="296" y="43" text-anchor="middle" font-size="14" font-weight="700" fill="#F3E6CC" letter-spacing="1.2">ÇAY · KAHVE · SİMİT</text>
+  <rect x="215" y="92" width="165" height="5" fill="#7B5236"/>${[232,256,280,330,354].map(x=>teaGlass(x,92,.8)).join('')}<path d="M296 92v-16h20v16z" fill="#C0C6C4"/><path d="M300 76v-6h12v6z" fill="#9AA3A1"/>`,
+  front:`<rect x="190" y="178" width="210" height="72" fill="#6E4630"/><rect x="186" y="171" width="214" height="9" rx="2" fill="#4F3122"/>${teaGlass(240,171)}${steam(240,146)}${simit(330,162)}${simit(352,166)}`},
+ carsi:{L:[300,190,.8],back:`<rect width="400" height="250" fill="#ECE4D4"/><g>${Array.from({length:10},(_,i)=>`<rect x="${i*40}" y="0" width="40" height="40" fill="${i%2?'#F6F1E6':'#C23A33'}"/><circle cx="${i*40+20}" cy="40" r="20" fill="${i%2?'#F6F1E6':'#C23A33'}"/>`).join('')}</g>
+  <rect x="246" y="78" width="118" height="44" rx="4" fill="#2B2B2B"/><text x="305" y="96" text-anchor="middle" font-size="11" fill="#fff">Domates</text><text x="305" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#F6C344">₺40 / kg</text>`,
+  front:`<rect x="176" y="182" width="224" height="68" fill="#8A5B36"/><rect x="172" y="176" width="228" height="8" fill="#6A4227"/>
+  <g>${Array.from({length:9},(_,i)=>`<circle cx="${196+(i%3)*14}" cy="${166-Math.floor(i/3)*8}" r="8" fill="#D8352A"/>`).join('')}</g>
+  <g>${Array.from({length:9},(_,i)=>`<circle cx="${262+(i%3)*14}" cy="${166-Math.floor(i/3)*8}" r="8" fill="#F08C22"/>`).join('')}</g>
+  <g>${Array.from({length:6},(_,i)=>`<ellipse cx="${326+(i%3)*16}" cy="${168-Math.floor(i/3)*9}" rx="10" ry="5" fill="#4E9A3B" transform="rotate(-20 ${326+(i%3)*16} ${168-Math.floor(i/3)*9})"/>`).join('')}</g>
+  <rect x="200" y="186" width="30" height="14" fill="#fff"/><text x="215" y="197" text-anchor="middle" font-size="9" font-weight="700" fill="#222">₺40</text>
+  <rect x="266" y="186" width="30" height="14" fill="#fff"/><text x="281" y="197" text-anchor="middle" font-size="9" font-weight="700" fill="#222">₺35</text>`},
+ ulasim:{L:[335,236,.78],back:`<rect width="400" height="250" fill="#CDE5EF"/><rect y="138" width="400" height="60" fill="#3C84A4"/>
+  <path d="M0 138q30 -14 70 -6t90 0v6z" fill="#8DA9B4"/>
+  <g class="ferry"><path d="M200 140h170l-14 16h-142z" fill="#F4F4F0"/><rect x="225" y="122" width="120" height="18" fill="#F4F4F0"/><g fill="#2F4858">${[0,1,2,3,4,5,6].map(i=>`<rect x="${232+i*15}" y="127" width="9" height="7" rx="1"/>`).join('')}</g><rect x="270" y="106" width="12" height="16" fill="#1F1F1F"/><rect x="270" y="110" width="12" height="4" fill="#E9B94A"/></g>
+  <g class="gull" stroke="#3a4a52" stroke-width="1.5" fill="none"><path d="M180 60q5 -5 10 0q5 -5 10 0"/><path d="M230 44q4 -4 8 0q4 -4 8 0"/></g>
+  <rect y="196" width="400" height="54" fill="#A3978A"/><rect y="186" width="400" height="4" fill="#6C635A"/>${[20,80,140,200,260,320,380].map(x=>`<rect x="${x}" y="168" width="3" height="20" fill="#6C635A"/>`).join('')}<rect y="168" width="400" height="3" fill="#6C635A"/>
+  <rect x="190" y="16" width="198" height="40" rx="5" fill="#16232A"/><text x="200" y="33" font-size="11" fill="#F7B33C" font-weight="700">VAPUR  Kadıköy ⇄ Eminönü</text><text x="200" y="49" font-size="11" fill="#F7B33C">Kalkış: 10 dk</text>`,front:''},
+ otel:{L:[300,194,.8],back:`<rect width="400" height="250" fill="#DCE5E7"/><rect y="0" width="400" height="10" fill="#B89B5E"/>
+  <text x="300" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="#7D6633" letter-spacing="3">RESEPSİYON</text>
+  <rect x="228" y="46" width="150" height="62" rx="4" fill="#8B6A43"/>${Array.from({length:12},(_,i)=>`<g><circle cx="${242+(i%6)*24}" cy="${60+Math.floor(i/6)*26}" r="2" fill="#E4D2A6"/><rect x="${239+(i%6)*24}" y="${63+Math.floor(i/6)*26}" width="6" height="10" rx="2" fill="#D9B44A"/></g>`).join('')}`,
+  front:`<rect x="186" y="180" width="214" height="70" fill="#34495C"/><rect x="182" y="173" width="218" height="9" rx="2" fill="#24364A"/><path d="M226 173a10 10 0 0 1 20 0z" fill="#D7B24A"/><rect x="234" y="160" width="3" height="4" fill="#D7B24A"/><rect x="350" y="152" width="18" height="21" rx="3" fill="#C9734A"/><circle cx="359" cy="146" r="11" fill="#4F8F52"/>`},
+ saglik:{L:[300,196,.8],back:`<rect width="400" height="250" fill="#F2F5F4"/>
+  <rect x="214" y="14" width="64" height="44" rx="4" fill="#fff" stroke="#D2DAD8"/><text x="246" y="49" text-anchor="middle" font-size="36" font-weight="700" fill="#D3262E">E</text><text x="330" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#D3262E" letter-spacing="2">ECZANE</text>
+  ${[72,112].map(y=>`<rect x="210" y="${y}" width="180" height="4" fill="#B8C5C2"/>`+Array.from({length:8},(_,i)=>`<rect x="${214+i*22}" y="${y-18+(i%3)*2}" width="16" height="${18-(i%3)*2}" fill="${['#5DA3C8','#E58B57','#7DBE84','#E3C34F','#B48BD0'][i%5]}"/>`).join('')).join('')}`,
+  front:`<rect x="186" y="182" width="214" height="68" fill="#C7D6D3"/><rect x="182" y="175" width="218" height="9" rx="2" fill="#9FB3AF"/><rect x="240" y="160" width="22" height="15" fill="#5DA3C8"/><rect x="266" y="164" width="16" height="11" fill="#E58B57"/>`},
+ is:{L:[322,232,.74],back:`<rect width="400" height="250" fill="#E3E8EE"/><rect y="200" width="400" height="50" fill="#B9C2CC"/>
+  <rect x="206" y="22" width="176" height="100" rx="5" fill="#fff" stroke="#C7CFD8"/><text x="218" y="42" font-size="12" font-weight="700" fill="#2B3A4A">Toplantı · 14:00</text>
+  <g fill="#3C7FBF"><rect x="222" y="86" width="14" height="26"/><rect x="242" y="72" width="14" height="40"/><rect x="262" y="62" width="14" height="50"/></g><path d="M292 108l20 -18 16 8 30 -34" stroke="#D5473C" stroke-width="2.5" fill="none"/>`,
+  front:`<rect x="210" y="206" width="190" height="44" fill="#6E5844"/><rect x="206" y="200" width="194" height="8" fill="#56442F"/><path d="M250 200l6 -26h52l-6 26z" fill="#3C4650"/><rect x="246" y="198" width="66" height="3" fill="#2B333A"/>`},
+ ev:{L:[318,232,.78],back:`<rect width="400" height="250" fill="#F1E4D6"/><rect y="196" width="400" height="54" fill="#B98F6A"/>
+  <rect x="214" y="26" width="120" height="92" rx="3" fill="#BFE0EC" stroke="#FFFFFF" stroke-width="5"/><g fill="#C2553E"><path d="M220 112v-16l14 -8 14 8v16z"/><path d="M252 112v-24l12 -6 12 6v24z"/></g><g fill="#7E93A0"><path d="M282 112q20 -30 40 0z"/><rect x="290" y="72" width="3" height="40"/><path d="M289 74l2.5 -8 2.5 8z"/></g><path d="M274 26v92M214 72h120" stroke="#fff" stroke-width="4"/>
+  <circle cx="370" cy="52" r="15" fill="#fff" stroke="#6B4A33" stroke-width="3"/><path d="M370 52v-9M370 52l6 3" stroke="#333" stroke-width="2"/>`,
+  front:`<rect x="232" y="198" width="168" height="52" rx="12" fill="#8E3B42"/><rect x="232" y="182" width="168" height="26" rx="10" fill="#A2474F"/><rect x="250" y="174" width="34" height="22" rx="6" fill="#E7B54A"/>`}
+};
+function drawScene(sc){
+  const r=seeded(sc.id),b=BG[sc.tp];
+  const lis=look(r,r()<.5?'f':'m',sc.tp==='saglik'?{shirt:'#FDFDFB',coat:true}:{});
+  const spk=look(r,sc.g);
+  return `<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Сцена: ${esc(TAG[sc.tp])}">${b.back}${person(b.L[0],b.L[1],b.L[2],lis,'lis')}${b.front}${person(96,262,1.4,spk,'spk')}
+  <g class="bubble" transform="translate(140 58)"><rect width="42" height="24" rx="12" fill="#fff"/><circle cx="12" cy="12" r="3" fill="#3a4a52"/><circle cx="21" cy="12" r="3" fill="#3a4a52"/><circle cx="30" cy="12" r="3" fill="#3a4a52"/><path d="M6 20l-6 10 14-6z" fill="#fff"/></g></svg>`;
+}
+
+/* ---------- home ---------- */
+function renderHome(){
+  $('stPts').textContent=P.pts;
+  $('stAcc').textContent=P.ans?Math.round(P.cor/P.ans*100)+'%':'–';
+  $('stRev').textContent=P.review.length;
+  $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
+  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')} из роликов Easy Turkish: погода, завтрак`;
+  $('topics').innerHTML=TOPICS.map(([id,ru])=>`<button type="button" class="chip" id="tp-${id}" data-v="${id}" aria-pressed="${P.topic===id}">${ru}</button>`).join('');
+  for(const b of $('modeSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.mode);
+  for(const b of $('lenSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.len);
+  $('speedBtn').textContent='Скорость: '+SPEEDLBL[P.speed];
+  const n=pool().length;
+  $('startBtn').textContent=n?`Начать · ${Math.min(10,n)} ${plural(Math.min(10,n),'сцена','сцены','сцен')}`:'Нет сцен для этого выбора';
+  $('startBtn').disabled=!n;
+  const rv=P.review.length;
+  $('reviewBtn').textContent=rv?`Повторить ошибки (${rv})`:'Ошибок для повторения пока нет';
+  $('reviewBtn').disabled=!rv;
+}
+function pool(){return SCENES.filter(s=>(P.topic==='all'||s.tp===P.topic)&&(P.len==='all'||s.lv===P.len))}
+$('topics').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;P.topic=b.dataset.v;save();renderHome()});
+$('modeSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;P.mode=b.dataset.v;save();renderHome()});
+$('lenSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;P.len=b.dataset.v;save();renderHome()});
+$('voiceSel').addEventListener('change',e=>{P.voice=e.target.value;save()});
+$('speedBtn').addEventListener('click',()=>{P.speed={normal:'slow',slow:'fast',fast:'normal'}[P.speed];save();renderHome()});
+$('testVoice').addEventListener('click',()=>{if(!HAS_TTS)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('Merhaba! Türkçe öğrenmeye hazır mısın?');u.lang='tr-TR';u.rate=RATES[P.speed];const v=voiceFor('f');if(v)u.voice=v;speechSynthesis.speak(u)});
+const RESET_ASK='<span>Удалить очки, точность и список ошибок?</span><button type="button" class="link danger" id="resetYes">Да, сбросить</button><button type="button" class="link" id="resetNo">Отмена</button>';
+const RESET_IDLE='<button type="button" class="link" id="resetBtn">Сбросить прогресс</button>';
+$('resetRow').addEventListener('click',e=>{
+  const id=e.target.id,row=$('resetRow');
+  if(id==='resetBtn')row.innerHTML=RESET_ASK;
+  else if(id==='resetNo')row.innerHTML=RESET_IDLE;
+  else if(id==='resetYes'){Object.assign(P,{pts:0,ans:0,cor:0,review:[],seen:[],seenV:[]});save();row.innerHTML=RESET_IDLE;renderHome()}
+});
+
+/* ---------- round ---------- */
+let R=null,raf=0;
+function show(id){for(const s of ['home','play','done'])$(s).hidden=s!==id;window.scrollTo(0,0)}
+function startRound(review,video){
+  let list;
+  if(review){list=shuffle(P.review.map(id=>BYID[id]).filter(Boolean)).slice(0,10)}
+  else if(video){
+    let fresh=CLIPS.filter(c=>!P.seenV.includes(c.id));
+    if(fresh.length<10){P.seenV=[];fresh=CLIPS}
+    list=shuffle(fresh).slice(0,10);
+  }
+  else{
+    const all=pool();let fresh=all.filter(s=>!P.seen.includes(s.id));
+    if(fresh.length<Math.min(10,all.length)){P.seen=P.seen.filter(id=>!all.some(s=>s.id===id));fresh=all}
+    list=shuffle(fresh).slice(0,10);
+  }
+  if(!list.length)return;
+  R={list,i:0,pts:0,cor:0,miss:[],review,video:!!video};
+  show('play');showScene();
+}
+function showScene(){
+  const sc=R.list[R.i];R.answered=false;R.frac=1;
+  $('counter').textContent=(R.i+1)+'/'+R.list.length;
+  $('ptsNow').textContent=ochki(R.pts);
+  $('prog').style.width=(R.i/R.list.length*100)+'%';
+  if(sc.kind!=='clip'){
+    resetStage();
+    $('art').innerHTML=drawScene(sc);
+    $('tag').textContent=TAG[sc.tp];
+    const sub=$('sub');sub.textContent=sc.t;sub.hidden=!(P.mode==='sub'||!VOICES.length);
+  }
+  const opts=shuffle([[sc.r,true],[sc.d,false]]);
+  $('opts').innerHTML=opts.map(([t,ok],i)=>`<button type="button" class="opt" id="opt${i}" data-ok="${ok}"><kbd>${i+1}</kbd><span>${esc(t)}</span></button>`).join('');
+  $('fb').hidden=true;$('actions').hidden=true;$('gloss').hidden=true;
+  setTimer(1);cancelAnimationFrame(raf);
+  if(sc.kind==='clip')showClip(sc);
+  else speak(sc.t,sc.g,RATES[P.speed],startTimer);
+}
+function setTimer(f){$('timer').style.transform=`scaleX(${f})`}
+function startTimer(){
+  if(!R||R.answered)return;
+  const sc=R.list[R.i],dur=LV[sc.lv].time*1000,t0=performance.now(),idx=R.i;
+  cancelAnimationFrame(raf);
+  const tick=now=>{if(!R||R.answered||R.i!==idx)return;R.frac=Math.max(0,1-(now-t0)/dur);setTimer(R.frac);if(R.frac>0)raf=requestAnimationFrame(tick)};
+  raf=requestAnimationFrame(tick);
+}
+function answer(btn){
+  if(!R||R.answered)return;R.answered=true;cancelAnimationFrame(raf);
+  const sc=R.list[R.i],ok=btn.dataset.ok==='true';
+  for(const b of $('opts').children){b.disabled=true;if(b.dataset.ok==='true')b.classList.add('ok');else if(b===btn)b.classList.add('bad');else b.classList.add('dim')}
+  const pts=ok?LV[sc.lv].base+Math.round(R.frac*10):0;
+  R.pts+=pts;if(ok)R.cor++;else R.miss.push(sc);
+  P.ans++;if(ok)P.cor++;P.pts+=pts;
+  const seenArr=sc.kind==='clip'?P.seenV:P.seen;if(!seenArr.includes(sc.id))seenArr.push(sc.id);
+  if(!ok&&!P.review.includes(sc.id))P.review.push(sc.id);
+  if(ok&&R.review)P.review=P.review.filter(id=>id!==sc.id);
+  save();
+  const fb=$('fb');fb.hidden=false;fb.className='fb '+(ok?'ok':'bad');fb.textContent=ok?`✓ Верно · +${pts}`:'✗ Неверно · фраза добавлена в повторение';
+  $('ptsNow').textContent=ochki(R.pts);
+  if(sc.kind==='clip')$('maskTxt').textContent=sc.t;else $('sub').hidden=false;
+  const src=sc.kind==='clip'?`<div class="src">Источник: <a href="https://www.youtube.com/watch?v=${sc.vid}&t=${Math.floor(sc.s)}s" target="_blank" rel="noopener">${esc(VSRC[sc.vid]||'YouTube')} ↗</a></div>`:'';
+  $('gloss').innerHTML=`<div class="tr">${esc(sc.t)}</div><div class="ru">${esc(sc.r)}</div><dl>${sc.w.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('')}</dl>${src}`;
+  $('gloss').hidden=false;$('actions').hidden=false;
+  $('nextBtn').textContent=R.i+1<R.list.length?'Дальше →':'Итоги →';
+  $('nextBtn').focus({preventScroll:true});
+}
+function next(){stopSpeech();R.i++;if(R.i>=R.list.length)finish();else{showScene();window.scrollTo({top:0})}}
+function finish(){
+  $('prog').style.width='100%';
+  $('doneScore').textContent=R.cor+'/'+R.list.length;
+  $('doneLine').textContent=`+${ochki(R.pts)} · всего ${ochki(P.pts)}`;
+  $('missWrap').hidden=!R.miss.length;
+  $('missList').innerHTML=R.miss.map(s=>`<div><b>${esc(s.t)}</b><span>${esc(s.r)}</span></div>`).join('');
+  $('doneReview').hidden=!P.review.length;
+  $('doneReview').textContent=`Повторить ошибки (${P.review.length})`;
+  show('done');
+}
+$('opts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(b)answer(b)});
+$('againBtn').addEventListener('click',()=>replay());
+$('slowBtn').addEventListener('click',()=>{const sc=R&&R.list[R.i];replay(sc&&sc.kind==='clip'?.75:.6)});
+$('shield').addEventListener('click',e=>{e.stopPropagation();replay()});
+$('playOver').addEventListener('click',e=>{e.stopPropagation();replay()});
+$('videoBtn').addEventListener('click',()=>startRound(false,true));
+$('nextBtn').addEventListener('click',next);
+$('exitBtn').addEventListener('click',()=>{stopSpeech();cancelAnimationFrame(raf);R=null;renderHome();show('home')});
+$('startBtn').addEventListener('click',()=>startRound(false));
+$('reviewBtn').addEventListener('click',()=>startRound(true));
+$('againRound').addEventListener('click',()=>startRound(!!(R&&R.review&&P.review.length),!!(R&&R.video)));
+$('doneReview').addEventListener('click',()=>startRound(true));
+$('homeBtn').addEventListener('click',()=>{R=null;renderHome();show('home')});
+$('stage').addEventListener('click',()=>{const sc=R&&R.list[R.i];if(sc&&sc.kind!=='clip')replay()});
+document.addEventListener('keydown',e=>{
+  if($('play').hidden||!R)return;
+  if(e.key==='1'||e.key==='2'){const b=$('opt'+(+e.key-1));if(b)answer(b)}
+  else if(e.key===' '){e.preventDefault();$('againBtn').click()}
+  else if(e.key==='Enter'&&R.answered){e.preventDefault();next()}
+});
+
+/* ---------- boot ---------- */
+if(HAS_TTS){loadVoices();speechSynthesis.onvoiceschanged=()=>{loadVoices();renderHome()};setTimeout(()=>{loadVoices();renderHome()},700)}
+else{$('noVoice').hidden=false;$('noVoice').textContent='Этот браузер не умеет озвучивать текст. Субтитры будут включены автоматически.';$('voiceSel').innerHTML='<option>Нет доступных голосов</option>'}
+renderHome();
+})();
+</script>
+
+</body>
+</html>
