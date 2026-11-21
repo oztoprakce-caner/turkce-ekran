@@ -496,7 +496,7 @@ function playClip(sc,rate,onEnd){
     const t0=Date.now();let started=false;
     ytPoll=setInterval(()=>{
       let t=0,st=-1;try{t=YTP.getCurrentTime();st=YTP.getPlayerState()}catch(e){}
-      if(st===1&&!started){started=true;try{YTP.setPlaybackRate(rate||1)}catch(e){}}
+      if(st===1&&!started&&t>=sc.s-1&&t<sc.e){started=true;try{YTP.setPlaybackRate(rate||1)}catch(e){}}
       if(!started&&Date.now()-t0>3000)$('playOver').hidden=false;
       if(started&&t>=sc.e){clearInterval(ytPoll);try{YTP.pauseVideo()}catch(e){}onEnd&&onEnd()}
     },100);
