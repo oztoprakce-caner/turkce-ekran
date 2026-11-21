@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="РўСѓСЂРµС†РєРёР№ РґР»СЏ СЂСѓСЃСЃРєРѕРіРѕРІРѕСЂСЏС‰РёС…: Р°РЅРёРјРёСЂРѕРІР°РЅРЅС‹Рµ СЃС†РµРЅС‹ Рё РЅР°СЃС‚РѕСЏС‰РёРµ РІРёРґРµРѕ СЃ С‚СѓСЂРµС†РєРѕР№ СЂРµС‡СЊСЋ.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
 </head>
-<body>
-<title>Турецкий экран</title>
+<body><title>Турецкий экран</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
@@ -369,7 +370,7 @@ const RAW=[
 ['ev8','ev','u','f','Ayakkabılarını çıkarır mısın? Sana terlik vereyim.','Снимешь обувь? Я дам тебе тапочки.','Обувь можно не снимать, тапочки не нужны.','ayakkabı=обувь | çıkarmak=снимать | terlik=тапочки | vereyim=дам-ка']
 ];
 // Real clips: id, YouTube id, start s, end s, topic, Turkish (from the video's own captions), correct RU, distractor RU, glossary
-const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак'};
+const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве'};
 const RAWV=[
 ['w1','mGV2j3rmWHg',0.1,4.2,'Погода','Emine, bugün hava biraz soğuk, değil mi?','Эмине, сегодня немного холодно, правда?','Эмине, сегодня довольно жарко, правда?','hava=погода | biraz=немного | soğuk=холодный | değil mi?=не так ли?'],
 ['w2','mGV2j3rmWHg',8.5,13.0,'Погода','Sabah evden çıkarken gerçekten çok üşüdüm.','Утром, выходя из дома, я очень замёрзла.','Утром, выходя из дома, я забыла зонт.','çıkarken=выходя | gerçekten=по-настоящему | üşümek=мёрзнуть'],
@@ -390,7 +391,36 @@ const RAWV=[
 ['b7','QY_CsrSxk88',412.7,417.7,'Завтрак','Yani olmazsa olmazı tabii çay, kesin olması lazım.','Без чего никак — это, конечно, чай, он обязательно должен быть.','Чай не обязателен, главное — кофе.','olmazsa olmaz=то, без чего никак | kesin=обязательно | lazım=нужно'],
 ['b8','QY_CsrSxk88',433.8,441.5,'Завтрак','Menemen tabii ki de var. Evet, menemen bence de. Ama soğanlı mı, soğansız mı? Tabii ki soğansız bence.','Ещё, конечно, менемен. — Да, по-моему тоже. — А с луком или без? — Конечно, без лука!','Ещё, конечно, менемен. — Да, по-моему тоже. — А с луком или без? — Конечно, с луком!','menemen=яичница с помидорами и перцем | soğanlı=с луком | soğansız=без лука'],
 ['b9','QY_CsrSxk88',536.0,538.5,'Завтрак','Ben de peynirsiz asla kahvaltı yapamam.','Я тоже никогда не могу завтракать без сыра.','Я тоже никогда не ем сыр на завтрак.','peynir=сыр | -siz=без | asla=никогда | yapamam=не могу'],
-['b10','QY_CsrSxk88',868.8,873.5,'Завтрак','Röportajları yaparken bizim de karnımız epey acıktı.','Пока мы брали интервью, мы тоже здорово проголодались.','Пока мы брали интервью, мы успели позавтракать.','röportaj=интервью | yaparken=пока делали | karnımız acıktı=мы проголодались | epey=изрядно']
+['b10','QY_CsrSxk88',868.8,873.5,'Завтрак','Röportajları yaparken bizim de karnımız epey acıktı.','Пока мы брали интервью, мы тоже здорово проголодались.','Пока мы брали интервью, мы успели позавтракать.','röportaj=интервью | yaparken=пока делали | karnımız acıktı=мы проголодались | epey=изрядно'],
+
+['p1','BgKf9ZSFg2Y',38.0,43.9,'Где телефон?','Telefonu en son ne zaman kullandın? Biraz önce burada oturuyordum.','Когда ты последний раз пользовалась телефоном? — Я только что здесь сидела.','Где ты купила этот телефон? — Здесь недалеко, в магазине.','en son=в последний раз | ne zaman=когда | biraz önce=только что | oturuyordum=я сидела'],
+['p2','BgKf9ZSFg2Y',43.6,50.3,'Где телефон?','Masanın üstünde mi? Masanın üstünde değil.','Он на столе? — На столе его нет.','Он под столом? — Да, вот он, под столом.','masa=стол | üstünde=на, сверху | değil=не'],
+['p3','BgKf9ZSFg2Y',50.1,56.9,'Где телефон?','Masanın altında mı? Masanın altında da yok.','Под столом? — Под столом тоже нет.','За столом? — Да, вот он, за столом.','altında=под | da=тоже | yok=нет'],
+['p4','BgKf9ZSFg2Y',62.4,65.4,'Где телефон?','Emine, belki çantanın içindedir.','Эмине, может, он в сумке.','Эмине, может, он под сумкой.','belki=может быть | çanta=сумка | içinde=внутри | -dir=наверное (предположение)'],
+['p5','BgKf9ZSFg2Y',116.8,122.7,'Где телефон?','Sandalyenin arkasında olabilir mi? Burada da yok.','Может, он за стулом? — Здесь тоже нет.','Может, он на стуле? — Да, вот он.','sandalye=стул | arkasında=за, позади | olabilir mi=может ли быть'],
+['p6','BgKf9ZSFg2Y',122.5,132.1,'Где телефон?','Telefonum burada bir yerde ama nerede bilmiyorum. Belki telefonunu çaldırabiliriz. Olur, beni bir çaldırabilir misin?','Мой телефон где-то здесь, но не знаю где. — Может, позвоним на твой телефон? — Давай, позвонишь мне?','Мой телефон украли, не знаю кто. — Может, вызовем полицию? — Давай, позвонишь?','bir yerde=где-то | bilmiyorum=не знаю | çaldırmak=позвонить, чтобы телефон зазвонил (а ещё «дать украсть»!)'],
+['p7','BgKf9ZSFg2Y',178.1,186.1,'Где телефон?','Evet, ses içeriden geliyor. Kapının arkasında mı? Hayır, burada yok.','Да, звук идёт изнутри. — За дверью? — Нет, здесь нет.','Да, звук идёт с улицы. — Перед дверью? — Да, вот он.','ses=звук | içeriden=изнутри | kapı=дверь | önünde=перед'],
+['p8','BgKf9ZSFg2Y',199.9,210.0,'Где телефон?','Emine, telefonun rafta olabilir mi? Vazo ile aynanın arasında.','Эмине, может, твой телефон на полке? — Между вазой и зеркалом.','Эмине, может, твой телефон в шкафу? — Под вазой у зеркала.','raf=полка | vazo=ваза | ayna=зеркало | arasında=между'],
+['p9','BgKf9ZSFg2Y',270.6,275.6,'Где телефон?','Şekerlik bardakların arasında.','Сахарница стоит между стаканами.','Сахарница стоит рядом со стаканами.','şekerlik=сахарница | bardak=стакан | arasında=между | yanında=рядом'],
+['p10','BgKf9ZSFg2Y',282.5,286.5,'Где телефон?','Peçete kulaklığın altında.','Салфетка под наушниками.','Салфетка на наушниках.','peçete=салфетка | kulaklık=наушники | altında=под | üstünde=на'],
+
+['h1','qZewvo2CPvU',0.3,6.9,'Дом мечты','Emine, nasılsın? İyiyim Damla. Sen nasılsın? Ben de çok iyiyim.','Эмине, как дела? — Хорошо, Дамла. А ты как? — У меня тоже всё отлично.','Эмине, где ты? — Дома, Дамла. А ты где? — Я тоже дома.','nasılsın=как ты | iyiyim=я в порядке | ben de=я тоже'],
+['h2','qZewvo2CPvU',18.7,27.3,'Дом мечты','Nasıl bir ev hayal ediyorsun? Benim evim kesinlikle sade ve minimalist olmamalı.','О каком доме ты мечтаешь? — Мой дом точно не должен быть простым и минималистичным.','О каком доме ты мечтаешь? — Мой дом обязательно должен быть простым и минималистичным.','hayal etmek=мечтать | kesinlikle=точно | sade=простой | olmamalı=не должен быть'],
+['h3','qZewvo2CPvU',45.1,52.9,'Дом мечты','Ben doğanın içinde, dağların arasında küçük, ahşap bir ev istiyorum.','Я хочу маленький деревянный дом на природе, среди гор.','Я хочу большой каменный дом в городе, у моря.','doğa=природа | dağ=гора | ahşap=деревянный | istiyorum=я хочу'],
+['h4','qZewvo2CPvU',59.1,66.1,'Дом мечты','Balkonu ya da bahçesi var mı? Kesinlikle büyük bir bahçesi var.','А балкон или сад есть? — Конечно, есть большой сад.','А балкон или сад есть? — Нет, ни балкона, ни сада.','ya da=или | bahçe=сад | var mı=есть ли'],
+['h5','qZewvo2CPvU',72.0,76.7,'Дом мечты','Orada kuş sesleriyle kahvaltı yapmak istiyorum.','Хочу там завтракать под пение птиц.','Хочу там ужинать под шум моря.','orada=там | kuş=птица | sesleriyle=под звуки | kahvaltı yapmak=завтракать'],
+['h6','qZewvo2CPvU',99.6,110.2,'Дом мечты','Peki senin hayalindeki ev kaç odalı? Benim hayalimdeki ev dört odalı. İki banyolu, dört artı bir olmalı.','А сколько комнат в доме твоей мечты? — Четыре. С двумя ванными, «четыре плюс один».','А сколько комнат в доме твоей мечты? — Две. С одной ванной, «два плюс один».','kaç odalı=сколько комнат | banyo=ванная | dört artı bir=4+1: четыре комнаты + гостиная, так в Турции описывают квартиры'],
+['h7','qZewvo2CPvU',128.2,134.9,'Дом мечты','Çalışma odamda dev bir kütüphane olmalı. Tavandan yere kadar kitaplar.','В моём кабинете должна быть огромная библиотека. Книги от потолка до пола.','В моём кабинете не нужна библиотека. Книги я читаю в телефоне.','çalışma odası=кабинет | dev=огромный | tavan=потолок | yer=пол'],
+['h8','qZewvo2CPvU',144.4,150.3,'Дом мечты','Akşamları orada saatlerce kitap okuyorum. Çok huzurlu bir köşe.','По вечерам я часами читаю там книги. Очень спокойный уголок.','По утрам я там работаю. Очень шумный уголок.','akşamları=по вечерам | saatlerce=часами | huzurlu=спокойный, умиротворённый | köşe=уголок'],
+
+['c1','gG_NpAk04Ys',10.1,15.6,'Детство','Kahven nasıl? Güzel mi? Biraz sıcak ama çok lezzetli.','Как твой кофе? Хороший? — Немного горячий, но очень вкусный.','Как твой кофе? Хороший? — Немного холодный и совсем невкусный.','kahve=кофе | sıcak=горячий | lezzetli=вкусный'],
+['c2','gG_NpAk04Ys',17.4,24.3,'Детство','Ben de Türk kahvesi içiyorum. Yanında da soğuk su var.','Я тоже пью турецкий кофе. А к нему — холодная вода.','Я пью чай. А к нему — немного сахара.','içmek=пить | yanında=рядом, к нему | soğuk su=холодная вода'],
+['c3','gG_NpAk04Ys',39.2,47.3,'Детство','Gelirken yolda oyun oynayan çocuklar gördüm. Ama hepsi telefonlarıyla oyun oynuyordu.','По дороге сюда я видела играющих детей. Но все они играли в телефонах.','По дороге сюда я видела играющих детей. Они играли в мяч во дворе.','gelirken=по пути сюда | oyun oynamak=играть | hepsi=все | oynuyordu=играли'],
+['c4','gG_NpAk04Ys',75.5,86.4,'Детство','Ben çocukken zamanımın çoğunu sokakta geçiriyordum. Arkadaşlarım ile sokağa çıkıyordum. Saklambaç oynuyorduk.','В детстве я почти всё время проводила на улице. Выходила с друзьями, мы играли в прятки.','В детстве я почти всё время сидела дома. Читала книги и играла одна.','çocukken=в детстве | sokak=улица | saklambaç=прятки | -yordu=прошедшее длительное'],
+['c5','gG_NpAk04Ys',90.0,97.7,'Детство',"Biz akşam 8'e kadar sokakta kalıyorduk. Annem balkondan çağırıyordu. Eve gel artık.",'Мы гуляли на улице до восьми вечера. Мама звала с балкона: «Иди уже домой!»','Мы возвращались домой к шести. Мама ждала нас у двери с ужином.','-e kadar=до | çağırmak=звать | artık=уже, наконец'],
+['c6','gG_NpAk04Ys',105.5,110.5,'Детство','Şimdiki çocuklar sokakta oynamıyor. Evet, doğru.','Нынешние дети не играют на улице. — Да, правда.','Нынешние дети всё время играют на улице. — Да, правда.','şimdiki=нынешний | oynamıyor=не играют | doğru=верно'],
+['c7','gG_NpAk04Ys',117.3,127.7,'Детство','Senin çocukken bilgisayarın var mıydı? İlk bilgisayarımı 10 yaşında almışlardı. Ama internet yoktu.','У тебя в детстве был компьютер? — Первый компьютер мне купили в 10 лет. Но интернета не было.','У тебя в детстве был компьютер? — Компьютера у меня не было до 20 лет. Но был интернет-клуб.','var mıydı=был ли | yaşında=в возрасте | almışlardı=(мне) купили | yoktu=не было'],
+['c8','gG_NpAk04Ys',128.8,136.3,'Детство','Bizim de bilgisayarımız vardı. Ama günde sadece bir saat oynama hakkımız vardı.','У нас тоже был компьютер. Но играть разрешали только час в день.','У нас тоже был компьютер. Играть можно было сколько угодно.','vardı=был | günde=в день | sadece=только | hak=право']
 ];
 const CLIPS=RAWV.map(a=>{const d=a[3]-a[2];return {kind:'clip',id:a[0],vid:a[1],s:a[2],e:a[3],topic:a[4],t:a[5],r:a[6],d:a[7],lv:d<4.5?'k':d<7?'o':'u',w:a[8].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}});
 const SCENES=RAW.map(a=>({id:a[0],tp:a[1],lv:a[2],g:a[3],t:a[4],r:a[5],d:a[6],w:a[7].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}));
@@ -589,7 +619,7 @@ function renderHome(){
   $('stAcc').textContent=P.ans?Math.round(P.cor/P.ans*100)+'%':'–';
   $('stRev').textContent=P.review.length;
   $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
-  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')} из роликов Easy Turkish: погода, завтрак`;
+  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')} из роликов Easy Turkish: погода, завтрак, дом, детство и другие`;
   $('topics').innerHTML=TOPICS.map(([id,ru])=>`<button type="button" class="chip" id="tp-${id}" data-v="${id}" aria-pressed="${P.topic===id}">${ru}</button>`).join('');
   for(const b of $('modeSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.mode);
   for(const b of $('lenSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.len);
