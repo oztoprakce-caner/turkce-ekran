@@ -433,7 +433,7 @@ const RAW=[
 ['ev8','ev','u','f','Ayakkabılarını çıkarır mısın? Sana terlik vereyim.','Снимешь обувь? Я дам тебе тапочки.','Обувь можно не снимать, тапочки не нужны.','ayakkabı=обувь | çıkarmak=снимать | terlik=тапочки | vereyim=дам-ка']
 ];
 // Real clips: id, YouTube id, start s, end s, topic, Turkish (from the video's own captions), correct RU, distractor RU, glossary
-const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал',YCdLPBzOWKk:'«Фатмагюль» (Fatmagül’ün Suçu Ne?), 1-я серия · официальный канал','YjEfvVX-V9c':'«Кузей Гюней» (Kuzey Güney), 1-я серия · официальный канал',IB7OroiVwPA:'«Листопад» (Yaprak Dökümü), 1-я серия · официальный канал'};
+const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал',YCdLPBzOWKk:'«Фатмагюль» (Fatmagül’ün Suçu Ne?), 1-я серия · официальный канал','YjEfvVX-V9c':'«Кузей Гюней» (Kuzey Güney), 1-я серия · официальный канал',IB7OroiVwPA:'«Листопад» (Yaprak Dökümü), 1-я серия · официальный канал','yl-iudreN-g':'«Эзель», 4-я серия · официальный канал',vhkOhCdllJQ:'«Европейская сторона», 2-я серия · официальный канал',Wk2bSoBMEFg:'«Европейская сторона», 3-я серия · официальный канал'};
 const RAWV=[
 ['w1','mGV2j3rmWHg',0.1,4.2,'Погода','Emine, bugün hava biraz soğuk, değil mi?','Эмине, сегодня немного холодно, правда?','Эмине, сегодня довольно жарко, правда?','hava=погода | biraz=немного | soğuk=холодный | değil mi?=не так ли?'],
 ['w2','mGV2j3rmWHg',8.5,13.0,'Погода','Sabah evden çıkarken gerçekten çok üşüdüm.','Утром, выходя из дома, я очень замёрзла.','Утром, выходя из дома, я забыла зонт.','çıkarken=выходя | gerçekten=по-настоящему | üşümek=мёрзнуть'],
@@ -545,7 +545,39 @@ const RAWS=[
 ['yd14','IB7OroiVwPA',674.7,678.3,'Листопад',"Anadolu'dan gelen trenlerin son durağı burası.",'Здесь конечная остановка поездов из Анатолии.','Отсюда поезда отправляются в Анатолию.','gelen=приходящий | son durak=конечная остановка | burası=это место'],
 ['yd15','IB7OroiVwPA',688.2,690.3,'Листопад',"Kızıltoprak'a nasıl gidebiliriz?",'Как нам добраться до Кызылтопрака?','Сколько стоит билет до Кызылтопрака?','nasıl=как | gidebiliriz=можем доехать'],
 ['yd16','IB7OroiVwPA',691.5,693.7,'Листопад','Şuradaki gişeye sorun isterseniz.','Спросите, если хотите, вон в той кассе.','Купите, если хотите, билет у меня.','şuradaki=вон тот | gişe=касса | sorun=спросите | isterseniz=если хотите'],
-['yd17','IB7OroiVwPA',697.0,699.2,'Листопад','Adam bizi İstanbullu zannetti.','Этот человек принял нас за стамбульцев.','Этот человек сразу понял, что мы приезжие.','İstanbullu=стамбулец | zannetmek=считать, принимать за']
+['yd17','IB7OroiVwPA',697.0,699.2,'Листопад','Adam bizi İstanbullu zannetti.','Этот человек принял нас за стамбульцев.','Этот человек сразу понял, что мы приезжие.','İstanbullu=стамбулец | zannetmek=считать, принимать за'],
+
+['e9','yl-iudreN-g',47.1,49.7,'Эзель','Burada hastaneye götürsek daha iyi değil mi?','Может, лучше отвезти в больницу здесь?','Может, лучше сразу отвезти домой?','burada=здесь | hastane=больница | götürsek=если отвезём | daha iyi=лучше'],
+['e10','yl-iudreN-g',110.0,112.1,'Эзель','Konuşuruz. Ararım sizi.','Поговорим. Я вам позвоню.','Поговорим. Позвоните мне.','konuşuruz=поговорим | aramak=звонить | ararım=позвоню'],
+['e11','yl-iudreN-g',113.9,116.4,'Эзель','Güzel. Dikkat et.','Хорошо. Береги себя.','Хорошо. Не спеши.','güzel=хорошо, отлично | dikkat et=будь осторожен'],
+['e12','yl-iudreN-g',173.5,176.4,'Эзель','Saçmalama desene bana. Saçmalama.','— Скажи мне: «Не говори глупостей». — Не говори глупостей.','— Скажи мне правду. — Хорошо, скажу.','saçmalamak=говорить глупости | desene=скажи же'],
+['e13','yl-iudreN-g',180.7,183.6,'Эзель',"Sanki Ezel'i bir daha görmeyecekmişiz gibi.",'Как будто мы больше никогда не увидим Эзеля.','Как будто мы увидим Эзеля уже завтра.','sanki … gibi=как будто | bir daha=больше (никогда) | görmeyecekmişiz=будто не увидим'],
+['e14','yl-iudreN-g',235.6,237.4,'Эзель','Benim bir abim var.','У меня есть старший брат.','У меня нет брата.','abi=старший брат | var=есть | yok=нет'],
+['e15','yl-iudreN-g',248.0,252.4,'Эзель','Bir daha seni hiç göremeyeceğim ama seni hiç unutmayacağım.','Я больше никогда тебя не увижу, но никогда тебя не забуду.','Я скоро снова тебя увижу, но уже не узнаю.','göremeyeceğim=не смогу увидеть | unutmayacağım=не забуду | hiç=никогда'],
+['e16','yl-iudreN-g',307.6,309.8,'Эзель','Topladın mı eşyaların hepsini?','Ты собрал все вещи?','Ты разобрал все вещи?','toplamak=собирать | eşya=вещи | hepsi=всё'],
+['e17','yl-iudreN-g',345.5,348.0,'Эзель','Sarıl. Şimdi sarıl bari.','Обними. Ну хоть сейчас обними.','Отпусти. Сейчас же отпусти.','sarılmak=обнимать | bari=хотя бы'],
+['e18','yl-iudreN-g',579.9,583.9,'Эзель','Sizin girmeniz yasak. Bahar. Buradayım ben.','— Вам входить нельзя. — Бахар! Я здесь.','— Вам можно войти. — Бахар! Я ухожу.','girmek=входить | yasak=запрещено | buradayım=я здесь'],
+['e19','yl-iudreN-g',636.2,640.0,'Эзель','Ne zannediyorsun Cengiz? Hiçbir bedel ödemeyeceğimizi mi sanıyorsun?','Ты что думаешь, Дженгиз? Что мы ни за что не заплатим?','Ты что думаешь, Дженгиз? Что нам за всё заплатят?','zannetmek / sanmak=думать, полагать | bedel ödemek=платить цену'],
+['e20','yl-iudreN-g',674.4,677.2,'Эзель','Ben biraz dışarıdayım. Hava alıp geleceğim.','Я выйду ненадолго. Подышу воздухом и вернусь.','Я посижу дома. Мне нужно поспать.','dışarıda=снаружи | hava almak=подышать воздухом | gelmek=приходить'],
+['e21','yl-iudreN-g',736.0,738.6,'Эзель','Ne kadar teşekkür etsem azdır size.','Никакой благодарности вам не хватит.','Не стоит меня благодарить.','ne kadar … -sem=сколько бы ни… | az=мало'],
+['e23','yl-iudreN-g',751.6,756.4,'Эзель','Yorduk sizi de. Tatilinizden de ettik.','Мы вас и утомили, и отпуск вам испортили.','Вы нас утомили и испортили нам отпуск.','yormak=утомлять | tatil=отпуск | -den etmek=лишить чего-то'],
+['e24','yl-iudreN-g',816.8,822.0,'Эзель','Ne kadar uzağa gidersen git, başladığın yere dönersin sonunda.','Как далеко ни уйдёшь, в конце концов вернёшься туда, откуда начал.','Чем дальше уходишь, тем легче забыть, откуда начал.','ne kadar … -sen git=как далеко ни иди | başladığın yer=место, где начал | sonunda=в конце концов'],
+['e25','yl-iudreN-g',825.8,834.0,'Эзель','Ne kadar değişirsen değiş, nerede mutlu olduysan hep oraya çevirirsin kafanı.','Как бы ты ни менялся, всегда оборачиваешься туда, где был счастлив.','Если меняешься, то забываешь места, где был счастлив.','değişmek=меняться | mutlu=счастливый | kafanı çevirmek=оборачиваться'],
+
+['ay7','vhkOhCdllJQ',43.9,46.2,'Европейская сторона','Damat lazım mı?','Жених нужен?','Жених пришёл?','damat=жених, зять | lazım=нужен'],
+['ay8','vhkOhCdllJQ',307.5,310.1,'Европейская сторона','Biraz börek ye, ye.','Поешь немного бёрека, ешь-ешь.','Не ешь столько бёрека.','börek=пирог из теста юфка | ye=ешь'],
+['ay9','vhkOhCdllJQ',1033.2,1040.9,'Европейская сторона','Ne yapıyorsun oğlum? Ne diyorsun kardeşim? Çalışıyoruz işte ya.','— Ты что делаешь, сынок? — Ты о чём, брат? Работаем же!','— Ты что делаешь, сынок? — Отдыхаем, брат, сегодня выходной.','oğlum=сынок (и дружеское обращение) | ne diyorsun=ты о чём | işte=же, вот'],
+['ay10','vhkOhCdllJQ',1068.8,1071.3,'Европейская сторона','Saat kaç? İki.','— Который час? — Два.','— Сколько лет? — Два.','saat kaç=который час | kaç yaşında=сколько лет'],
+['ay11','vhkOhCdllJQ',1146.3,1148.9,'Европейская сторона','Bin dolardan başlıyor.','Начинается от тысячи долларов.','Стоит меньше тысячи долларов.','bin=тысяча | -den başlamak=начинаться от'],
+['ay12','vhkOhCdllJQ',1327.1,1332.6,'Европейская сторона','Sakın onlarla diyaloğa girme. Ya, arkadaş olmaz mı?','— Только не вступай с ними в разговоры. — Ну а подружиться нельзя?','— Обязательно поговори с ними. — Ну а если они не захотят?','sakın=ни в коем случае | diyaloğa girmek=вступать в разговор | olmaz mı=разве нельзя'],
+['ay13','vhkOhCdllJQ',1358.3,1362.0,'Европейская сторона','Şurada şöyle leopar desenli koltuk koyalım.','Давай поставим вот сюда кресло с леопардовым узором.','Давай уберём отсюда кресло с леопардовым узором.','şurada=вот здесь | desenli=с узором | koltuk=кресло | koyalım=поставим'],
+['ay14','vhkOhCdllJQ',1816.5,1819.4,'Европейская сторона','Çok meşgulüm ama gelirim inşallah.','Дел очень много, но, даст Бог, приду.','Дел нет, приду обязательно.','meşgul=занятой | gelirim=приду | inşallah=даст Бог, надеюсь'],
+['ay16','Wk2bSoBMEFg',187.9,190.4,'Европейская сторона','Aklıma geldi bugün.','Сегодня мне пришло в голову.','Сегодня совсем вылетело из головы.','aklıma geldi=пришло мне в голову | unuttum=забыл'],
+['ay17','Wk2bSoBMEFg',196.5,200.6,'Европейская сторона','Bayramdan bayrama bir telefon oldu.','Звонок — раз в год, от праздника до праздника.','Звонит каждый день, без перерыва.','bayramdan bayrama=от праздника до праздника, очень редко | telefon=звонок'],
+['ay19','Wk2bSoBMEFg',533.5,536.9,'Европейская сторона','Görüşürüz, bye canım.','Увидимся, пока, дорогая!','Привет, дорогая, проходи!','görüşürüz=увидимся | canım=дорогая, милая'],
+['ay20','Wk2bSoBMEFg',820.8,823.4,'Европейская сторона','Sadece arkadaşız dediler.','Сказали, что они просто друзья.','Сказали, что они уже женаты.','sadece=только, просто | arkadaşız=мы друзья | dediler=сказали'],
+['ay22','Wk2bSoBMEFg',988.0,990.5,'Европейская сторона','Aslı, sana bir hediye aldım.','Аслы, у меня для тебя подарок.','Аслы, спасибо за подарок.','hediye=подарок | aldım=купил(а)'],
+['ay23','Wk2bSoBMEFg',1084.3,1087.8,'Европейская сторона','Arkadaşlar yemek yemeye gitmişlerdir belki.','Может, друзья пошли поесть.','Может, друзья уже поели.','yemek yemek=есть, обедать | gitmişlerdir=наверное, пошли | belki=может быть']
 ];
 // clip topic -> scene topic chip, so a chosen topic mixes its scenes with matching real clips
 const CLIP_TP={'Погода':'tanisma','Детство':'tanisma','Завтрак':'kafe','Где телефон?':'ev','Дом мечты':'ev'};
@@ -573,7 +605,9 @@ ks1 B1 ks2 A2 ks3 B1 ks4 A2 ks5 B1 ks6 A1 ks7 A2
 ay1 A2 ay2 B1 ay3 B2 ay5 A2 ay6 B1
 f1 A1 f2 A2 f3 A1 f4 A2 f5 A1 f6 A2 f7 A2 f9 A1 f10 A1
 kg1 A1 kg2 A2 kg3 A2 kg4 A1 kg5 B1 kg6 A2 kg7 A2 kg8 B1 kg9 B1
-yd1 B2 yd2 B1 yd3 A1 yd4 A2 yd5 A2 yd6 A2 yd7 A2 yd8 B1 yd9 A1 yd10 B1 yd11 A1 yd12 B1 yd13 A2 yd14 B1 yd15 A2 yd16 B1 yd17 B1`.trim().split(/\s+/);
+yd1 B2 yd2 B1 yd3 A1 yd4 A2 yd5 A2 yd6 A2 yd7 A2 yd8 B1 yd9 A1 yd10 B1 yd11 A1 yd12 B1 yd13 A2 yd14 B1 yd15 A2 yd16 B1 yd17 B1
+e9 B1 e10 A2 e11 A1 e12 B1 e13 B2 e14 A1 e15 B1 e16 A2 e17 B1 e18 A2 e19 B2 e20 A2 e21 B1 e23 B2 e24 B2 e25 B2
+ay7 A2 ay8 A1 ay9 B1 ay10 A1 ay11 A2 ay12 B1 ay13 B1 ay14 A2 ay16 A2 ay17 B1 ay19 A1 ay20 B1 ay22 A2 ay23 B1`.trim().split(/\s+/);
 for(let i=0;i<CEFR.length;i+=2){const s=SCENES.concat(CLIPS).find(x=>x.id===CEFR[i]);if(s)s.cefr=CEFR[i+1]}
 const BYID=Object.fromEntries(SCENES.concat(CLIPS).map(s=>[s.id,s]));
 
