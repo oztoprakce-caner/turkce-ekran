@@ -122,6 +122,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
 .stage.video{aspect-ratio:16/9;background:#000}
 #ytwrap,#ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .shield{position:absolute;left:0;right:0;top:0;bottom:30%;cursor:pointer}
+.shield.full{bottom:0}
 .mask{position:absolute;left:0;right:0;bottom:0;height:30%;background:#0B1418;display:grid;place-items:center;color:#fff;font-weight:600;padding:0 14px;text-align:center;font-size:15px;line-height:1.35}
 .mask .muted{color:#9FB3B8;font-size:12.5px;font-weight:500}
 .playover{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);border:0;border-radius:99px;padding:12px 20px;background:rgba(255,255,255,.94);color:#111;font-weight:700;font-size:15px}
@@ -182,7 +183,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
     <button type="button" class="vbanner" id="videoBtn">
       <span class="vb-eyebrow">Новое · видео-режим</span>
       <span class="vb-title">Настоящая турецкая речь ›</span>
-      <span class="vb-sub" id="vbSub">Фрагменты роликов Easy Turkish: погода, завтрак</span>
+      <span class="vb-sub" id="vbSub">Сериалы «Эзель», «Чёрная любовь», «Европейская сторона» и Easy Turkish</span>
     </button>
 
     <div class="stats">
@@ -200,6 +201,16 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
       <div class="seg" id="modeSeg">
         <button type="button" id="mode-nosub" data-v="nosub">Без субтитров</button>
         <button type="button" id="mode-sub" data-v="sub">С субтитрами</button>
+      </div>
+    </div>
+    <div class="group">
+      <div class="label">Уровень</div>
+      <div class="seg" id="lvlSeg">
+        <button type="button" id="lvl-all" data-v="all">Все</button>
+        <button type="button" id="lvl-A1" data-v="A1">A1</button>
+        <button type="button" id="lvl-A2" data-v="A2">A2</button>
+        <button type="button" id="lvl-B1" data-v="B1">B1</button>
+        <button type="button" id="lvl-B2" data-v="B2">B2</button>
       </div>
     </div>
     <div class="group">
@@ -288,7 +299,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
 /* ---------- content ---------- */
 const TOPICS=[
  ['all','Все'],['tanisma','Знакомство'],['kafe','Кафе и ресторан'],['carsi','Рынок и магазин'],
- ['ulasim','Транспорт'],['otel','Отель и жильё'],['saglik','Аптека и врач'],['is','Работа и офис'],['ev','Дом и соседи']];
+ ['ulasim','Транспорт'],['otel','Отель и жильё'],['saglik','Аптека и врач'],['is','Работа и офис'],['ev','Дом и соседи'],['dizi','Сериалы']];
 const TAG=Object.fromEntries(TOPICS);
 const LV={k:{base:10,time:12},o:{base:15,time:16},u:{base:20,time:20}};
 const RAW=[
@@ -370,7 +381,7 @@ const RAW=[
 ['ev8','ev','u','f','Ayakkabılarını çıkarır mısın? Sana terlik vereyim.','Снимешь обувь? Я дам тебе тапочки.','Обувь можно не снимать, тапочки не нужны.','ayakkabı=обувь | çıkarmak=снимать | terlik=тапочки | vereyim=дам-ка']
 ];
 // Real clips: id, YouTube id, start s, end s, topic, Turkish (from the video's own captions), correct RU, distractor RU, glossary
-const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве'};
+const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал'};
 const RAWV=[
 ['w1','mGV2j3rmWHg',0.1,4.2,'Погода','Emine, bugün hava biraz soğuk, değil mi?','Эмине, сегодня немного холодно, правда?','Эмине, сегодня довольно жарко, правда?','hava=погода | biraz=немного | soğuk=холодный | değil mi?=не так ли?'],
 ['w2','mGV2j3rmWHg',8.5,13.0,'Погода','Sabah evden çıkarken gerçekten çok üşüdüm.','Утром, выходя из дома, я очень замёрзла.','Утром, выходя из дома, я забыла зонт.','çıkarken=выходя | gerçekten=по-настоящему | üşümek=мёрзнуть'],
@@ -422,13 +433,60 @@ const RAWV=[
 ['c7','gG_NpAk04Ys',117.3,127.7,'Детство','Senin çocukken bilgisayarın var mıydı? İlk bilgisayarımı 10 yaşında almışlardı. Ama internet yoktu.','У тебя в детстве был компьютер? — Первый компьютер мне купили в 10 лет. Но интернета не было.','У тебя в детстве был компьютер? — Компьютера у меня не было до 20 лет. Но был интернет-клуб.','var mıydı=был ли | yaşında=в возрасте | almışlardı=(мне) купили | yoktu=не было'],
 ['c8','gG_NpAk04Ys',128.8,136.3,'Детство','Bizim de bilgisayarımız vardı. Ama günde sadece bir saat oynama hakkımız vardı.','У нас тоже был компьютер. Но играть разрешали только час в день.','У нас тоже был компьютер. Играть можно было сколько угодно.','vardı=был | günde=в день | sadece=только | hak=право']
 ];
-const CLIPS=RAWV.map(a=>{const d=a[3]-a[2];return {kind:'clip',id:a[0],vid:a[1],s:a[2],e:a[3],topic:a[4],t:a[5],r:a[6],d:a[7],lv:d<4.5?'k':d<7?'o':'u',w:a[8].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}});
+// Series clips (official channel uploads, no burned-in subtitles): same row format as RAWV
+// Boundaries: start ~0.4 s before the first word, end <1 s after the last word (from word-timed captions)
+const RAWS=[
+['e1','FSo8aRocl9w',44.2,48.9,'Эзель','Buraya uzun bir yoldan geldim. Daha uzun bir yolum var.','Я пришёл сюда долгим путём. А впереди путь ещё длиннее.','Я пришёл сюда коротким путём. Дальше идти уже недалеко.','buraya=сюда | yol=путь, дорога | geldim=я пришёл | yolum var=у меня есть путь'],
+['e2','FSo8aRocl9w',73.0,76.0,'Эзель','Ne kadar kaldı otele daha?','Сколько ещё до отеля?','Сколько стоит номер в отеле?','ne kadar=сколько | kaldı=осталось | otele=до отеля (-e «куда»)'],
+['e3','FSo8aRocl9w',347.4,353.2,'Эзель','Benim adım Ezel. Buraya intikam almaya geldim.','Меня зовут Эзель. Я пришёл сюда, чтобы отомстить.','Меня зовут Эзель. Я пришёл сюда, чтобы начать новую жизнь.','adım=моё имя | intikam almak=мстить | -maya geldim=пришёл, чтобы…'],
+['e4','FSo8aRocl9w',841.1,847.0,'Эзель','12 sene önce Ömer askerden döndü. Yeni bir hayata başlayacaktı.','Двенадцать лет назад Омер вернулся из армии. Он собирался начать новую жизнь.','Двенадцать лет назад Омер ушёл в армию. Он собирался там остаться.','sene önce=лет назад | asker=армия | dönmek=возвращаться | başlayacaktı=собирался начать'],
+['e5','FSo8aRocl9w',991.6,994.6,'Эзель','Ne o, içki mi içtin?','Что такое, ты выпил?','Что такое, ты не выспался?','ne o=что такое | içki=спиртное | içtin=ты выпил'],
+['e6','FSo8aRocl9w',1262.3,1270.6,'Эзель','Nerede başladın kızım çalışmaya? Bu şey yerde işte, kumarhanede. Kumarhane falan değil, otelin resepsiyonunda.','— Где ты начала работать, дочка? — Ну там… в казино. — Никакое не казино, а ресепшен отеля.','— Где ты начала работать, дочка? — В ресторане. — Никакой не ресторан, а кухня отеля.','kızım=дочка | kumarhane=казино | falan değil=никакой не… | resepsiyon=ресепшен'],
+['e7','FSo8aRocl9w',1346.1,1348.9,'Эзель','Evde oturup çocuk mu bakacağım ben?','Мне что, сидеть дома и нянчить детей?','Я хочу сидеть дома и растить детей.','evde oturmak=сидеть дома | çocuk bakmak=нянчить детей | mu=вопросительная частица'],
+['e8','FSo8aRocl9w',1120.5,1123.6,'Эзель','Buradayım bak, gitmedim hiçbir yere.','Я здесь, смотри, никуда не ушёл.','Меня здесь нет, я давно ушёл.','buradayım=я здесь | gitmedim=не ушёл | hiçbir yere=никуда'],
+['ks1','fVNzewv_2oU',356.8,363.5,'Чёрная любовь','Ne oldu lan? Ayakta uyuyorsun. Rüya bile gördüm, çok acayip bir şey.','— Что случилось? Ты спишь на ходу. — Мне даже сон приснился, что-то очень странное.','— Что случилось? Ты не спал всю ночь? — Да, всю ночь работал.','lan=эй, слушай (грубовато, между друзьями) | ayakta uyumak=спать на ходу | rüya görmek=видеть сон | acayip=странный'],
+['ks2','fVNzewv_2oU',536.3,538.9,'Чёрная любовь','Yapma, yardım edeyim mi?','Оставь, давай я помогу?','Не надо, я сама справлюсь.','yapma=не делай, оставь | yardım etmek=помогать | edeyim mi=давай я…?'],
+['ks3','fVNzewv_2oU',676.0,681.2,'Чёрная любовь','Öyleyse geleceğe kadeh kaldırıyorum. Hadi bakalım, geleceğe!','Тогда я поднимаю бокал за будущее. Ну что ж, за будущее!','Тогда я поднимаю бокал за прошлое. Ну что ж, за прошлое!','öyleyse=тогда | gelecek=будущее | kadeh kaldırmak=поднимать бокал | hadi bakalım=ну что ж'],
+['ks4','fVNzewv_2oU',690.1,692.4,'Чёрная любовь','Maşallah benim oğluma!','Машаллах, какой у меня сын!','Бедный мой сын!','maşallah=«как пожелал Бог» — так хвалят, чтобы не сглазить | oğlum=мой сын'],
+['ks5','fVNzewv_2oU',880.0,882.9,'Чёрная любовь','Ne yapıyorsun oğlum? Çıkalım diyorum, hâlâ duruyorsun.','Ты что делаешь, сынок? Я говорю «пошли», а ты всё стоишь.','Ты что делаешь, сынок? Я говорю «стой», а ты уходишь.','çıkalım=давай выйдем | diyorum=я говорю | hâlâ=всё ещё | durmak=стоять'],
+['ks6','fVNzewv_2oU',956.0,958.4,'Чёрная любовь','Nihan, bu kim?','Нихан, кто это?','Нихан, где он?','bu=это | kim=кто | nerede=где'],
+['ks7','fVNzewv_2oU',191.0,194.6,'Чёрная любовь','Bu arada gerçekten teşekkür ederim, gerçekten önemli.','Кстати, правда спасибо, это действительно важно.','Кстати, это совсем неважно, не благодари.','bu arada=кстати | gerçekten=правда, действительно | önemli=важный'],
+['ay1','3GgkE5klW-o',82.9,85.9,'Европейская сторона','Nasıl büyüdüler, değil mi?','Как они выросли, правда?','Как они постарели, правда?','nasıl=как | büyümek=расти | değil mi=правда же'],
+['ay2','3GgkE5klW-o',124.1,126.8,'Европейская сторона','Zamane gençleri bunlar.','Вот она, нынешняя молодёжь.','Вот они, наши старики.','zamane=нынешний, современный | gençler=молодёжь | bunlar=эти'],
+['ay3','3GgkE5klW-o',460.5,465.4,'Европейская сторона','Gitmeyin kızın üstüne, yarın öbür gün özlersiniz.','Не давите на девочку, не сегодня завтра будете по ней скучать.','Не ходите к девочке, завтра она сама придёт.','üstüne gitmek=давить на кого-то | yarın öbür gün=не сегодня завтра | özlemek=скучать'],
+['ay5','3GgkE5klW-o',299.5,302.0,'Европейская сторона','Sabah sabah ya!','Ну с самого же утра!','Ну наконец-то вечер!','sabah sabah=с самого утра (недовольно) | ya=ну, же'],
+['ay6','3GgkE5klW-o',805.3,809.2,'Европейская сторона','Nasıl desem... Sizin aile böyle biraz...','Как бы сказать… Ваша семья немного такая…','Скажу прямо: ваша семья очень хорошая.','nasıl desem=как бы сказать | aile=семья | biraz=немного']
+];
+// clip topic -> scene topic chip, so a chosen topic mixes its scenes with matching real clips
+const CLIP_TP={'Погода':'tanisma','Детство':'tanisma','Завтрак':'kafe','Где телефон?':'ev','Дом мечты':'ev'};
+const mkClip=(a,series)=>{const d=a[3]-a[2];return {kind:'clip',id:a[0],vid:a[1],s:a[2],e:a[3],topic:a[4],t:a[5],r:a[6],d:a[7],
+  burn:!series,series,tp:series?'dizi':(CLIP_TP[a[4]]||'tanisma'),lv:d<4.5?'k':d<7?'o':'u',
+  w:a[8].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}};
+const CLIPS=RAWV.map(a=>mkClip(a,false)).concat(RAWS.map(a=>mkClip(a,true)));
 const SCENES=RAW.map(a=>({id:a[0],tp:a[1],lv:a[2],g:a[3],t:a[4],r:a[5],d:a[6],w:a[7].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}));
+// CEFR level of each phrase (grammar + vocabulary): A1 basics, A2 everyday, B1 compound sentences/tenses, B2 bookish or idiomatic
+const CEFR=`ta1 A1 ta2 A1 ta3 A1 ta4 A2 ta5 A2 ta6 A2 ta7 B1 ta8 A2 ta9 A2
+ka1 A1 ka2 A1 ka3 A2 ka4 B1 ka5 B1 ka6 A1 ka7 B1 ka8 B1 ka9 A1
+ca1 A1 ca2 A2 ca3 A2 ca4 B1 ca5 A2 ca6 A1 ca7 A2 ca8 A2 ca9 A2
+ul1 A1 ul2 A2 ul3 B1 ul4 B1 ul5 A2 ul6 B1 ul7 B2 ul8 A1 ul9 B1
+ot1 A1 ot2 A1 ot3 A2 ot4 B1 ot5 A1 ot6 B1 ot7 B2 ot8 A2
+sa1 A1 sa2 B1 sa3 A2 sa4 B1 sa5 B1 sa6 B1 sa7 A2 sa8 A1
+is1 B1 is2 A2 is3 A2 is4 B1 is5 A2 is6 B2 is7 B1 is8 A2
+ev1 B1 ev2 A2 ev3 A2 ev4 B2 ev5 A2 ev6 A2 ev7 A1 ev8 B1
+w1 A2 w2 B1 w3 A2 w4 A2 w5 B1 w6 B2 w7 B1 w8 B1 w9 A2 w10 A2
+b1 A2 b2 A1 b3 A2 b4 A2 b5 B1 b6 B1 b7 B2 b8 B1 b9 B1 b10 B2
+p1 B1 p2 A1 p3 A1 p4 A2 p5 A2 p6 B2 p7 A2 p8 A2 p9 A2 p10 A2
+h1 A1 h2 B1 h3 A2 h4 A2 h5 A2 h6 B1 h7 B1 h8 B1
+c1 A1 c2 A2 c3 B1 c4 B1 c5 B1 c6 A2 c7 B2 c8 B1
+e1 B1 e2 A2 e3 B1 e4 B1 e5 A2 e6 B2 e7 B1 e8 A2
+ks1 B1 ks2 A2 ks3 B1 ks4 A2 ks5 B1 ks6 A1 ks7 A2
+ay1 A2 ay2 B1 ay3 B2 ay5 A2 ay6 B1`.trim().split(/\s+/);
+for(let i=0;i<CEFR.length;i+=2){const s=SCENES.concat(CLIPS).find(x=>x.id===CEFR[i]);if(s)s.cefr=CEFR[i+1]}
 const BYID=Object.fromEntries(SCENES.concat(CLIPS).map(s=>[s.id,s]));
 
 /* ---------- storage ---------- */
 const KEY='tr-ekran-v1';
-let P={pts:0,ans:0,cor:0,review:[],seen:[],seenV:[],topic:'all',mode:'nosub',len:'all',voice:'auto',speed:'normal'};
+let P={pts:0,ans:0,cor:0,review:[],seen:[],seenV:[],topic:'all',mode:'nosub',len:'all',lvl:'all',voice:'auto',speed:'normal'};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)P=Object.assign(P,s)}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
 
@@ -489,32 +547,55 @@ function loadYT(){
   return ytLoad;
 }
 function stopVideo(){clearInterval(ytPoll);try{YTP&&YTP.pauseVideo&&YTP.pauseVideo()}catch(e){}}
+function setPlayOver(txt){const b=$('playOver');b.textContent=txt;b.hidden=false}
 function playClip(sc,rate,onEnd){
   clearInterval(ytPoll);$('playOver').hidden=true;
   const go=()=>{
+    try{YTP.unMute()}catch(e){}
     try{if(YTP.__vid!==sc.vid){YTP.loadVideoById({videoId:sc.vid,startSeconds:sc.s});YTP.__vid=sc.vid}else{YTP.seekTo(sc.s,true);YTP.playVideo()}}catch(e){}
-    const t0=Date.now();let started=false;
+    const t0=Date.now();let started=false,mutedTry=false,soundChecked=false;
     ytPoll=setInterval(()=>{
       let t=0,st=-1;try{t=YTP.getCurrentTime();st=YTP.getPlayerState()}catch(e){}
+      // counts as started only once the playhead is inside this clip (a fresh video can briefly report the old time)
       if(st===1&&!started&&t>=sc.s-1&&t<sc.e){started=true;try{YTP.setPlaybackRate(rate||1)}catch(e){}}
-      if(!started&&Date.now()-t0>3000)$('playOver').hidden=false;
-      if(started&&t>=sc.e){clearInterval(ytPoll);try{YTP.pauseVideo()}catch(e){}onEnd&&onEnd()}
+      if(!started){
+        const el=Date.now()-t0;
+        // sound autoplay blocked: start muted (always allowed), then unmute and rewind below
+        if(el>1500&&!mutedTry&&st!==1&&st!==3){mutedTry=true;try{YTP.mute();YTP.seekTo(sc.s,true);YTP.playVideo()}catch(e){}}
+        if(el>5000)setPlayOver('▶ Смотреть фрагмент');
+        return;
+      }
+      if(mutedTry&&!soundChecked){
+        soundChecked=true;
+        try{YTP.unMute();YTP.seekTo(sc.s,true)}catch(e){}
+        setTimeout(()=>{try{if(YTP.isMuted())setPlayOver('🔊 Включить звук')}catch(e){}},500);
+        return;
+      }
+      if(t>=sc.e){clearInterval(ytPoll);try{YTP.pauseVideo()}catch(e){}onEnd&&onEnd()}
     },100);
   };
   if(YTP&&YTP.__ready){go();return}
   if(!YTP){
     YTP=new YT.Player('yt',{host:'https://www.youtube-nocookie.com',width:'100%',height:'100%',videoId:sc.vid,
       playerVars:{controls:0,disablekb:1,rel:0,playsinline:1,iv_load_policy:3,fs:0,cc_load_policy:0,start:Math.floor(sc.s)},
-      events:{onReady:()=>{YTP.__ready=true;YTP.__vid=sc.vid;YTP.__pending&&YTP.__pending()}}});
+      events:{onReady:()=>{YTP.__ready=true;YTP.__vid=sc.vid;YTP.__pending&&YTP.__pending()},
+        // 101/150: the rights holder blocks playback outside YouTube; let the learner answer from the text instead
+        onError:()=>{clearInterval(ytPoll);const cur=R&&R.list[R.i];if(!cur||cur.kind!=='clip')return;
+          $('vmsg').textContent='Это видео сейчас нельзя показать вне YouTube. Ответьте по тексту.';$('vmsg').hidden=false;
+          $('playOver').hidden=true;if(cur.burn)$('maskTxt').textContent=cur.t;else{$('sub').textContent=cur.t;$('sub').hidden=false}
+          if(!R.answered)startTimer()}}});
   }
   YTP.__pending=go;
 }
 function showClip(sc){
   $('stage').classList.add('video');$('art').hidden=true;$('sub').hidden=true;
-  $('ytwrap').hidden=false;$('mask').hidden=false;$('shield').hidden=false;$('vmsg').hidden=true;
-  $('maskTxt').innerHTML=P.mode==='sub'?esc(sc.t):'<span class="muted">Субтитры скрыты · слушайте</span>';
-  $('tag').textContent='Видео · '+sc.topic;
-  loadYT().then(()=>playClip(sc,1,startTimer)).catch(()=>{$('vmsg').hidden=false;$('maskTxt').textContent=sc.t;startTimer()});
+  $('ytwrap').hidden=false;$('shield').hidden=false;$('vmsg').hidden=true;
+  // Easy Turkish videos have subtitles burned into the picture: cover them; series clips play full-frame
+  $('mask').hidden=!sc.burn;$('shield').classList.toggle('full',!sc.burn);
+  if(sc.burn)$('maskTxt').innerHTML=P.mode==='sub'?esc(sc.t):'<span class="muted">Субтитры скрыты · слушайте</span>';
+  else{$('sub').textContent=sc.t;$('sub').hidden=P.mode!=='sub'}
+  $('tag').textContent=(sc.series?'Сериал · ':'Видео · ')+sc.topic+' · '+(sc.cefr||'');
+  loadYT().then(()=>playClip(sc,1,startTimer)).catch(()=>{$('vmsg').hidden=false;if(sc.burn)$('maskTxt').textContent=sc.t;else $('sub').hidden=false;startTimer()});
 }
 function resetStage(){
   $('stage').classList.remove('video');$('art').hidden=false;
@@ -619,22 +700,32 @@ function renderHome(){
   $('stAcc').textContent=P.ans?Math.round(P.cor/P.ans*100)+'%':'–';
   $('stRev').textContent=P.review.length;
   $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
-  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')} из роликов Easy Turkish: погода, завтрак, дом, детство и другие`;
+  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: сериалы «Эзель», «Чёрная любовь», «Европейская сторона» и ролики Easy Turkish`;
+  for(const b of $('lvlSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.lvl);
   $('topics').innerHTML=TOPICS.map(([id,ru])=>`<button type="button" class="chip" id="tp-${id}" data-v="${id}" aria-pressed="${P.topic===id}">${ru}</button>`).join('');
   for(const b of $('modeSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.mode);
   for(const b of $('lenSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.len);
   $('speedBtn').textContent='Скорость: '+SPEEDLBL[P.speed];
-  const n=pool().length;
-  $('startBtn').textContent=n?`Начать · ${Math.min(10,n)} ${plural(Math.min(10,n),'сцена','сцены','сцен')}`:'Нет сцен для этого выбора';
+  const n=pool().length+clipPool().length;
+  $('startBtn').textContent=n?`Начать · ${Math.min(10,n)} ${plural(Math.min(10,n),'задание','задания','заданий')}`:'Нет заданий для этого выбора';
   $('startBtn').disabled=!n;
   const rv=P.review.length;
   $('reviewBtn').textContent=rv?`Повторить ошибки (${rv})`:'Ошибок для повторения пока нет';
   $('reviewBtn').disabled=!rv;
 }
-function pool(){return SCENES.filter(s=>(P.topic==='all'||s.tp===P.topic)&&(P.len==='all'||s.lv===P.len))}
+const fits=s=>(P.topic==='all'||s.tp===P.topic)&&(P.len==='all'||s.lv===P.len)&&(P.lvl==='all'||s.cefr===P.lvl);
+function pool(){return SCENES.filter(fits)}
+function clipPool(){return CLIPS.filter(fits)}
+// take n items from a list, preferring ones not seen yet; resets that list's "seen" marks when it runs dry
+function takeFresh(all,seenKey,n){
+  let fresh=all.filter(s=>!P[seenKey].includes(s.id));
+  if(fresh.length<Math.min(n,all.length)){P[seenKey]=P[seenKey].filter(id=>!all.some(s=>s.id===id));fresh=all}
+  return shuffle(fresh).slice(0,n);
+}
 $('topics').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;P.topic=b.dataset.v;save();renderHome()});
 $('modeSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;P.mode=b.dataset.v;save();renderHome()});
 $('lenSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;P.len=b.dataset.v;save();renderHome()});
+$('lvlSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;P.lvl=b.dataset.v;save();renderHome()});
 $('voiceSel').addEventListener('change',e=>{P.voice=e.target.value;save()});
 $('speedBtn').addEventListener('click',()=>{P.speed={normal:'slow',slow:'fast',fast:'normal'}[P.speed];save();renderHome()});
 $('testVoice').addEventListener('click',()=>{if(!HAS_TTS)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('Merhaba! Türkçe öğrenmeye hazır mısın?');u.lang='tr-TR';u.rate=RATES[P.speed];const v=voiceFor('f');if(v)u.voice=v;speechSynthesis.speak(u)});
@@ -653,15 +744,15 @@ function show(id){for(const s of ['home','play','done'])$(s).hidden=s!==id;windo
 function startRound(review,video){
   let list;
   if(review){list=shuffle(P.review.map(id=>BYID[id]).filter(Boolean)).slice(0,10)}
-  else if(video){
-    let fresh=CLIPS.filter(c=>!P.seenV.includes(c.id));
-    if(fresh.length<10){P.seenV=[];fresh=CLIPS}
-    list=shuffle(fresh).slice(0,10);
-  }
+  else if(video){list=takeFresh(CLIPS,'seenV',10)}
   else{
-    const all=pool();let fresh=all.filter(s=>!P.seen.includes(s.id));
-    if(fresh.length<Math.min(10,all.length)){P.seen=P.seen.filter(id=>!all.some(s=>s.id===id));fresh=all}
-    list=shuffle(fresh).slice(0,10);
+    // mixed round: about 4 of 10 are real video clips, the rest animated scenes (topic and length filters apply to both)
+    const sp=pool(),cp=clipPool();
+    let nc=Math.min(cp.length,sp.length?4:10);const ns=Math.min(sp.length,10-nc);nc=Math.min(cp.length,10-ns);
+    const clips=takeFresh(cp,'seenV',nc),scenes=takeFresh(sp,'seen',ns);
+    // spread the clips through the round instead of bunching them
+    list=shuffle(scenes);const step=Math.max(1,Math.floor((list.length+clips.length)/(clips.length+1)));
+    clips.forEach((c,i)=>list.splice(Math.min(list.length,(i+1)*step+i),0,c));
   }
   if(!list.length)return;
   R={list,i:0,pts:0,cor:0,miss:[],review,video:!!video};
@@ -675,7 +766,7 @@ function showScene(){
   if(sc.kind!=='clip'){
     resetStage();
     $('art').innerHTML=drawScene(sc);
-    $('tag').textContent=TAG[sc.tp];
+    $('tag').textContent=TAG[sc.tp]+' · '+(sc.cefr||'');
     const sub=$('sub');sub.textContent=sc.t;sub.hidden=!(P.mode==='sub'||!VOICES.length);
   }
   const opts=shuffle([[sc.r,true],[sc.d,false]]);
@@ -706,7 +797,7 @@ function answer(btn){
   save();
   const fb=$('fb');fb.hidden=false;fb.className='fb '+(ok?'ok':'bad');fb.textContent=ok?`✓ Верно · +${pts}`:'✗ Неверно · фраза добавлена в повторение';
   $('ptsNow').textContent=ochki(R.pts);
-  if(sc.kind==='clip')$('maskTxt').textContent=sc.t;else $('sub').hidden=false;
+  if(sc.kind==='clip'&&sc.burn)$('maskTxt').textContent=sc.t;else{$('sub').textContent=sc.t;$('sub').hidden=false}
   const src=sc.kind==='clip'?`<div class="src">Источник: <a href="https://www.youtube.com/watch?v=${sc.vid}&t=${Math.floor(sc.s)}s" target="_blank" rel="noopener">${esc(VSRC[sc.vid]||'YouTube')} ↗</a></div>`:'';
   $('gloss').innerHTML=`<div class="tr">${esc(sc.t)}</div><div class="ru">${esc(sc.r)}</div><dl>${sc.w.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('')}</dl>${src}`;
   $('gloss').hidden=false;$('actions').hidden=false;
