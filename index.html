@@ -203,7 +203,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
     <button type="button" class="vbanner" id="videoBtn">
       <span class="vb-eyebrow">Новое · видео-режим</span>
       <span class="vb-title">Настоящая турецкая речь ›</span>
-      <span class="vb-sub" id="vbSub">6 турецких сериалов и ролики Easy Turkish</span>
+      <span class="vb-sub" id="vbSub">9 турецких сериалов и ролики Easy Turkish</span>
     </button>
 
     <div class="stats">
@@ -433,7 +433,7 @@ const RAW=[
 ['ev8','ev','u','f','Ayakkabılarını çıkarır mısın? Sana terlik vereyim.','Снимешь обувь? Я дам тебе тапочки.','Обувь можно не снимать, тапочки не нужны.','ayakkabı=обувь | çıkarmak=снимать | terlik=тапочки | vereyim=дам-ка']
 ];
 // Real clips: id, YouTube id, start s, end s, topic, Turkish (from the video's own captions), correct RU, distractor RU, glossary
-const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал',YCdLPBzOWKk:'«Фатмагюль» (Fatmagül’ün Suçu Ne?), 1-я серия · официальный канал','YjEfvVX-V9c':'«Кузей Гюней» (Kuzey Güney), 1-я серия · официальный канал',IB7OroiVwPA:'«Листопад» (Yaprak Dökümü), 1-я серия · официальный канал','yl-iudreN-g':'«Эзель», 4-я серия · официальный канал',vhkOhCdllJQ:'«Европейская сторона», 2-я серия · официальный канал',Wk2bSoBMEFg:'«Европейская сторона», 3-я серия · официальный канал'};
+const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал',YCdLPBzOWKk:'«Фатмагюль» (Fatmagül’ün Suçu Ne?), 1-я серия · официальный канал','YjEfvVX-V9c':'«Кузей Гюней» (Kuzey Güney), 1-я серия · официальный канал',IB7OroiVwPA:'«Листопад» (Yaprak Dökümü), 1-я серия · официальный канал','yl-iudreN-g':'«Эзель», 4-я серия · официальный канал',vhkOhCdllJQ:'«Европейская сторона», 2-я серия · официальный канал',Wk2bSoBMEFg:'«Европейская сторона», 3-я серия · официальный канал',TFjjfXJ9ojA:'«Эзель», 5-я серия · официальный канал',Wn5piPtkki0:'«Восьмидесятые» (Seksenler), 1-я серия · официальный канал',yK3dj4v3t6k:'«Лейла и Меджнун» (Leyla ile Mecnun), 1-я серия · официальный канал',hdqI6zGDUP8:'«Кавак Еллери» (Kavak Yelleri), 1-я серия · официальный канал'};
 const RAWV=[
 ['w1','mGV2j3rmWHg',0.1,4.2,'Погода','Emine, bugün hava biraz soğuk, değil mi?','Эмине, сегодня немного холодно, правда?','Эмине, сегодня довольно жарко, правда?','hava=погода | biraz=немного | soğuk=холодный | değil mi?=не так ли?'],
 ['w2','mGV2j3rmWHg',8.5,13.0,'Погода','Sabah evden çıkarken gerçekten çok üşüdüm.','Утром, выходя из дома, я очень замёрзла.','Утром, выходя из дома, я забыла зонт.','çıkarken=выходя | gerçekten=по-настоящему | üşümek=мёрзнуть'],
@@ -577,7 +577,55 @@ const RAWS=[
 ['ay19','Wk2bSoBMEFg',533.5,536.9,'Европейская сторона','Görüşürüz, bye canım.','Увидимся, пока, дорогая!','Привет, дорогая, проходи!','görüşürüz=увидимся | canım=дорогая, милая'],
 ['ay20','Wk2bSoBMEFg',820.8,823.4,'Европейская сторона','Sadece arkadaşız dediler.','Сказали, что они просто друзья.','Сказали, что они уже женаты.','sadece=только, просто | arkadaşız=мы друзья | dediler=сказали'],
 ['ay22','Wk2bSoBMEFg',988.0,990.5,'Европейская сторона','Aslı, sana bir hediye aldım.','Аслы, у меня для тебя подарок.','Аслы, спасибо за подарок.','hediye=подарок | aldım=купил(а)'],
-['ay23','Wk2bSoBMEFg',1084.3,1087.8,'Европейская сторона','Arkadaşlar yemek yemeye gitmişlerdir belki.','Может, друзья пошли поесть.','Может, друзья уже поели.','yemek yemek=есть, обедать | gitmişlerdir=наверное, пошли | belki=может быть']
+['ay23','Wk2bSoBMEFg',1084.3,1087.8,'Европейская сторона','Arkadaşlar yemek yemeye gitmişlerdir belki.','Может, друзья пошли поесть.','Может, друзья уже поели.','yemek yemek=есть, обедать | gitmişlerdir=наверное, пошли | belki=может быть'],
+
+['e26','TFjjfXJ9ojA',17.6,20.3,'Эзель','Hepsi senin kim olduğunu merak ediyor.','Всем интересно, кто ты такой.','Все уже знают, кто ты такой.','hepsi=все | kim olduğunu=кто ты есть | merak etmek=интересоваться'],
+['e27','TFjjfXJ9ojA',21.5,24.1,'Эзель','Sana baktıklarında ne görüyorlar sence?','Как думаешь, что они видят, когда смотрят на тебя?','Как думаешь, почему они на тебя не смотрят?','baktıklarında=когда смотрят | sence=по-твоему'],
+['e28','TFjjfXJ9ojA',58.4,60.2,'Эзель','Bir suç ortağı arıyor.','Он ищет сообщника.','Он ищет свидетеля.','suç ortağı=сообщник | aramak=искать | tanık=свидетель'],
+['e29','TFjjfXJ9ojA',92.7,99.7,'Эзель','Sana bakacaklar ama seni görmeyecekler. Sende en çok arzuladıkları şeyi görecekler.','Они будут смотреть на тебя, но не увидят тебя. Они увидят в тебе то, чего больше всего желают.','Они не будут смотреть на тебя, но всё о тебе узнают.','bakmak=смотреть | görmek=видеть | arzulamak=желать'],
+['e30','TFjjfXJ9ojA',139.5,141.9,'Эзель','Şebnem, kahve mi getireyim?','Шебнем, принести кофе?','Шебнем, ты принесла кофе?','getireyim mi=принести? | getirdin mi=ты принёс?'],
+['e31','TFjjfXJ9ojA',192.6,194.5,'Эзель','Pek bir şey yok Ali Bey.','Почти ничего нет, Али-бей.','Всё нашли, Али-бей.','pek bir şey yok=почти ничего нет'],
+['e32','TFjjfXJ9ojA',198.2,201.9,'Эзель','Pek bir şey mi yok? Hiçbir şey mi yok?','Почти ничего? Или совсем ничего?','Много чего? Или вообще всё?','hiçbir şey=ничего | pek=почти, не очень'],
+['e33','TFjjfXJ9ojA',272.6,274.7,'Эзель','Arkandan kapa kapıyı.','Закрой за собой дверь.','Открой мне дверь.','arkandan=за собой | kapamak=закрывать | açmak=открывать'],
+['e34','TFjjfXJ9ojA',321.8,324.0,'Эзель','Konuyu değiştirmeyelim lütfen.','Давай не будем менять тему, пожалуйста.','Давай сменим тему, пожалуйста.','konu=тема | değiştirmeyelim=не будем менять'],
+['e35','TFjjfXJ9ojA',326.4,331.1,'Эзель','İkisinden birisi olsan hangisi olursun? Balık mı, balıkçı mı?','Если бы ты был одним из двух, кем бы ты был? Рыбой или рыбаком?','Ты больше любишь ловить рыбу или есть её?','olsan=если бы ты был | hangisi=который | balıkçı=рыбак'],
+['e36','TFjjfXJ9ojA',371.4,374.1,'Эзель','Karşımda gerçek bir kahraman var.','Передо мной настоящий герой.','Передо мной настоящий преступник.','karşımda=передо мной | gerçek=настоящий | kahraman=герой'],
+['e37','TFjjfXJ9ojA',374.5,377.0,'Эзель','Belki de numara yapıyorumdur. Tabii.','— А может, я притворяюсь. — Конечно.','— А может, я говорю правду. — Конечно.','numara yapmak=притворяться | -dur=наверное (предположение)'],
+['e38','TFjjfXJ9ojA',403.6,409.6,'Эзель','O zaman işimiz var. Evet, bence de işimiz var.','— Тогда у нас есть дело. — Да, по-моему, тоже есть.','— Тогда нам не о чем говорить. — Да, по-моему, тоже.','işimiz var=у нас есть дело | bence de=по-моему, тоже'],
+['e39','TFjjfXJ9ojA',415.8,417.6,'Эзель','Bu mesafeden anlaşılmıyor.','С такого расстояния не понять.','С такого расстояния всё видно.','mesafe=расстояние | anlaşılmıyor=непонятно'],
+['e40','TFjjfXJ9ojA',433.2,435.6,'Эзель','15 dakikaya oradayım. Ayrılma yanından.','Буду там через 15 минут. Не отходи от него.','Буду там через 15 минут. Уходи оттуда.','-e oradayım=буду там через… | ayrılmak=отходить, расставаться | yanından=от него'],
+['e41','TFjjfXJ9ojA',457.4,459.6,'Эзель','Akşama bende yemek yer misin?','Поужинаешь у меня вечером?','Ты ужинал вечером дома?','bende=у меня | yemek yemek=есть | yer misin=поешь ли?'],
+['e42','TFjjfXJ9ojA',612.5,614.0,'Эзель','Bir saniye lütfen.','Одну секунду, пожалуйста.','Одну минуту, я ухожу.','saniye=секунда | lütfen=пожалуйста'],
+['e43','TFjjfXJ9ojA',619.6,622.9,'Эзель','Affedersiniz, bir beden daha küçüğü.','Извините, а на размер меньше?','Извините, а на размер больше?','affedersiniz=извините | beden=размер | küçük=маленький | büyük=большой'],
+['e44','TFjjfXJ9ojA',632.4,634.0,'Эзель','Onları da bana ver.','Дай мне и их тоже.','Не давай их мне.','onları=их | da=тоже | ver=дай'],
+['e45','TFjjfXJ9ojA',638.8,640.3,'Эзель','Bu ne güzel sürpriz.','Какой приятный сюрприз!','Какой неприятный сюрприз!','ne güzel=как хорошо, какой приятный | sürpriz=сюрприз'],
+['e46','TFjjfXJ9ojA',643.1,645.5,'Эзель','Tamam, ara beni haber gelince.','Хорошо, позвони мне, когда будут новости.','Хорошо, я позвоню, когда будут новости.','ara beni=позвони мне | haber=новость | gelince=когда придёт'],
+
+['sk1','Wn5piPtkki0',268.5,270.0,'Восьмидесятые','Merhaba babacığım.','Здравствуй, папочка!','Пока, папочка!','merhaba=здравствуй | babacığım=папочка'],
+['sk2','Wn5piPtkki0',279.4,282.3,'Восьмидесятые','Kız canım, iyiyim, iyiyim.','Да, дорогая, я в порядке, в порядке.','Ой, дорогая, мне плохо.','kız=эй, девочка (обращение) | canım=дорогая | iyiyim=я в порядке'],
+['sk3','Wn5piPtkki0',301.2,303.2,'Восьмидесятые','Bayramda bile gelmiyorlar.','Даже на праздник не приезжают.','Приезжают на каждый праздник.','bayram=праздник | bile=даже | gelmiyorlar=не приходят'],
+['sk4','Wn5piPtkki0',384.6,386.6,'Восьмидесятые','Bütün mahalleli gelecez.','Мы придём всем кварталом.','Никто из соседей не придёт.','mahalleli=жители квартала | gelecez=разг. «geleceğiz» — придём'],
+['sk5','Wn5piPtkki0',686.2,688.8,'Восьмидесятые','Geliyorlar, geliyorlar!','Идут, идут!','Уходят, уходят!','geliyorlar=идут (сюда) | gidiyorlar=уходят'],
+
+['lm1','yK3dj4v3t6k',126.4,128.9,'Лейла и Меджнун','Tamam canım, sustuk.','Ладно, дорогая, молчим.','Ладно, дорогая, рассказываю.','susmak=молчать | sustuk=замолчали'],
+['lm2','yK3dj4v3t6k',222.7,225.3,'Лейла и Меджнун','Evet, daha kahve içecektik.','Да, мы ещё собирались выпить кофе.','Да, мы уже выпили кофе.','daha=ещё | içecektik=собирались выпить'],
+['lm3','yK3dj4v3t6k',248.1,250.7,'Лейла и Меджнун','İyi, siz nasılsınız İskender Bey?','Хорошо, а вы как, Искандер-бей?','Хорошо, а где вы живёте, Искандер-бей?','nasılsınız=как вы | nerede oturuyorsunuz=где вы живёте'],
+['lm4','yK3dj4v3t6k',297.3,300.5,'Лейла и Меджнун','Bir de damatlığını görürsek inşallah.','Даст Бог, увидим его ещё и женихом.','Даст Бог, увидим его на свадьбе гостем.','damatlık=свадебный костюм жениха; «damatlığını görmek» — дожить до его свадьбы'],
+['lm5','yK3dj4v3t6k',419.3,421.5,'Лейла и Меджнун','Ayıptır ya, gelmişken.','Да ну, неудобно же — раз уж пришли.','Уходите, раз уж пришли.','ayıp=неприлично, неудобно | gelmişken=раз уж пришли'],
+['lm6','yK3dj4v3t6k',427.2,430.2,'Лейла и Меджнун','Kız çok güzel ya.','Девушка очень красивая.','Девушка очень злая.','kız=девушка | güzel=красивый'],
+['lm7','yK3dj4v3t6k',440.0,443.6,'Лейла и Меджнун','Bu akşam misafirliğe gideceğiz. Ona göre hazır ol.','Сегодня вечером идём в гости. Так что будь готов.','Сегодня вечером к нам придут гости. Так что приберись.','misafirliğe gitmek=идти в гости | ona göre=соответственно | hazır ol=будь готов'],
+['lm8','yK3dj4v3t6k',449.3,452.0,'Лейла и Меджнун','…sana kız istemeye gidiyoruz.','…мы идём сватать для тебя невесту.','…мы идём к тебе в гости.','kız istemek=сватать девушку (традиционный визит к её семье)'],
+['lm9','yK3dj4v3t6k',455.4,457.0,'Лейла и Меджнун','Baba, sen ciddi misin?','Папа, ты серьёзно?','Папа, ты устал?','ciddi=серьёзный | misin=ли ты'],
+
+['ky1','hdqI6zGDUP8',63.5,65.3,'Кавак Еллери','Kafayı yedi gene ya.','Опять у него крыша поехала!','Опять он проголодался!','kafayı yemek=сойти с ума (букв. «съесть голову») | gene=опять'],
+['ky2','hdqI6zGDUP8',127.8,132.8,'Кавак Еллери','Çok seveceksin buraları. Hele yazı nasıl güzel olur.','Тебе здесь очень понравится. А летом здесь как красиво!','Тебе здесь не понравится. Особенно зимой.','seveceksin=полюбишь | hele=особенно | yaz=лето'],
+['ky3','hdqI6zGDUP8',133.8,138.6,'Кавак Еллери',"Havası da öyle, Almanya'nın havası gibi değil. Mis gibidir. Mis.",'И воздух тут не такой, как в Германии. Чистый, свежий!','И погода тут такая же, как в Германии. Дождливая.','hava=воздух, погода | gibi değil=не как | mis gibi=свежий, ароматный'],
+['ky4','hdqI6zGDUP8',143.3,145.8,'Кавак Еллери','O yüzden dikkat edeceksin hareketlerine.','Поэтому будешь следить за своим поведением.','Поэтому можешь делать что хочешь.','o yüzden=поэтому | dikkat etmek=следить, быть внимательным | hareket=поведение'],
+['ky5','hdqI6zGDUP8',199.8,202.9,'Кавак Еллери','Bakıyorum, eğleniyorsunuz ha. Yürüyün oğlum. Dondum ben.','Смотрю, вам весело. Пошли, ребята, мне холодно.','Смотрю, вам скучно. Сидите, ребята, тут тепло.','eğlenmek=веселиться | yürüyün=пошли | donmak=мёрзнуть'],
+['ky6','hdqI6zGDUP8',305.5,307.6,'Кавак Еллери','İyi, tamam, akşama görüşürüz.','Хорошо, ладно, увидимся вечером.','Хорошо, ладно, увидимся утром.','akşama=к вечеру | görüşürüz=увидимся'],
+['ky7','hdqI6zGDUP8',437.0,439.3,'Кавак Еллери','Hadi ben kaçtım.','Ну всё, я убегаю.','Ну всё, я остаюсь.','kaçtım=я сбежал — разг. «я пошёл»'],
+['ky8','hdqI6zGDUP8',449.6,452.2,'Кавак Еллери','Sana ne oluyor? Gidiyorum. Nereye?','— Тебе-то что? Я ухожу. — Куда?','— Что с тобой? Я остаюсь. — Почему?','sana ne oluyor=тебе-то что | nereye=куда'],
+['ky9','hdqI6zGDUP8',508.0,511.9,'Кавак Еллери','Efe, geç otur çocuğum. Babam bir şeyler konuşacak seninle.','Эфе, проходи, садись, сынок. Отец хочет с тобой кое о чём поговорить.','Эфе, вставай, сынок. Отец уже ушёл.','geç otur=проходи, садись | çocuğum=дитя моё | konuşacak=поговорит']
 ];
 // clip topic -> scene topic chip, so a chosen topic mixes its scenes with matching real clips
 const CLIP_TP={'Погода':'tanisma','Детство':'tanisma','Завтрак':'kafe','Где телефон?':'ev','Дом мечты':'ev'};
@@ -607,7 +655,11 @@ f1 A1 f2 A2 f3 A1 f4 A2 f5 A1 f6 A2 f7 A2 f9 A1 f10 A1
 kg1 A1 kg2 A2 kg3 A2 kg4 A1 kg5 B1 kg6 A2 kg7 A2 kg8 B1 kg9 B1
 yd1 B2 yd2 B1 yd3 A1 yd4 A2 yd5 A2 yd6 A2 yd7 A2 yd8 B1 yd9 A1 yd10 B1 yd11 A1 yd12 B1 yd13 A2 yd14 B1 yd15 A2 yd16 B1 yd17 B1
 e9 B1 e10 A2 e11 A1 e12 B1 e13 B2 e14 A1 e15 B1 e16 A2 e17 B1 e18 A2 e19 B2 e20 A2 e21 B1 e23 B2 e24 B2 e25 B2
-ay7 A2 ay8 A1 ay9 B1 ay10 A1 ay11 A2 ay12 B1 ay13 B1 ay14 A2 ay16 A2 ay17 B1 ay19 A1 ay20 B1 ay22 A2 ay23 B1`.trim().split(/\s+/);
+ay7 A2 ay8 A1 ay9 B1 ay10 A1 ay11 A2 ay12 B1 ay13 B1 ay14 A2 ay16 A2 ay17 B1 ay19 A1 ay20 B1 ay22 A2 ay23 B1
+e26 B1 e27 B1 e28 B1 e29 B2 e30 A2 e31 A2 e32 B1 e33 A2 e34 B1 e35 B1 e36 B1 e37 B2 e38 B1 e39 B1 e40 A2 e41 A2 e42 A1 e43 A2 e44 A2 e45 A2 e46 A2
+sk1 A1 sk2 A2 sk3 B1 sk4 B1 sk5 A1
+lm1 A2 lm2 B1 lm3 A1 lm4 B2 lm5 B1 lm6 A1 lm7 B1 lm8 B1 lm9 A2
+ky1 B1 ky2 B1 ky3 B1 ky4 B1 ky5 A2 ky6 A1 ky7 A2 ky8 A2 ky9 B1`.trim().split(/\s+/);
 for(let i=0;i<CEFR.length;i+=2){const s=SCENES.concat(CLIPS).find(x=>x.id===CEFR[i]);if(s)s.cefr=CEFR[i+1]}
 const BYID=Object.fromEntries(SCENES.concat(CLIPS).map(s=>[s.id,s]));
 
@@ -832,7 +884,7 @@ function renderHome(){
   $('stRev').textContent=P.review.length;
   $('boardBtn').hidden=!LB_URL;$('whoRow').hidden=!(LB_URL&&P.name);$('whoName').textContent=P.name;
   $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
-  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: 6 турецких сериалов и ролики Easy Turkish`;
+  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: 9 турецких сериалов и ролики Easy Turkish`;
   for(const b of $('lvlSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.lvl);
   $('topics').innerHTML=TOPICS.map(([id,ru])=>`<button type="button" class="chip" id="tp-${id}" data-v="${id}" aria-pressed="${P.topic===id}">${ru}</button>`).join('');
   for(const b of $('modeSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.mode);
