@@ -7,7 +7,7 @@
  */
 const SHEET = 'Рейтинг';
 const HEAD = ['Ad', 'Toplam puan', 'Haftalık puan', 'Hafta', 'Doğruluk %', 'En çok seviye', 'Tur sayısı', 'Son güncelleme', 'id'];
-const LEVELS = ['A1', 'A2', 'B1', 'B2'];
+const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
 
 function sheet_() {
   const ss = SpreadsheetApp.getActive();
@@ -36,7 +36,25 @@ function json_(obj) {
 
 const num_ = (v, max) => Math.max(0, Math.min(max, Math.round(Number(v) || 0)));
 
+// Owner's C1 videos: served only from this Drive folder, as base64 JSON so the site can play them in its own player
+const C1_FOLDER = '1gllPIMwQGDfAAzeVVTMdU9L3eynDbWcX';
+const MAX_VIDEO_BYTES = 20 * 1024 * 1024;
+
+function video_(rawId) {
+  const id = String(rawId || '').replace(/[^A-Za-z0-9_-]/g, '');
+  let f;
+  try { f = DriveApp.getFileById(id); } catch (err) { return json_({ ok: false, error: 'not found' }); }
+  let inFolder = false;
+  const parents = f.getParents();
+  while (parents.hasNext()) { if (parents.next().getId() === C1_FOLDER) { inFolder = true; break; } }
+  if (!inFolder || f.isTrashed()) return json_({ ok: false, error: 'forbidden' });
+  if (f.getSize() > MAX_VIDEO_BYTES) return json_({ ok: false, error: 'too big' });
+  const blob = f.getBlob();
+  return json_({ ok: true, mime: blob.getContentType() || 'video/mp4', b64: Utilities.base64Encode(blob.getBytes()) });
+}
+
 function doGet(e) {
+  if (e && e.parameter && e.parameter.video) return video_(e.parameter.video);
   const rows = sheet_().getDataRange().getValues().slice(1);
   const wk = isoWeek_(new Date());
   const me = String((e && e.parameter && e.parameter.me) || '');
@@ -88,3 +106,6 @@ function doPost(e) {
 
 // Run once from the editor to create the "Рейтинг" sheet and grant access
 function setup() { sheet_(); }
+
+// Run once from the editor to grant Drive read access (needed for C1 videos)
+function authDrive() { DriveApp.getFolderById(C1_FOLDER).getName(); }

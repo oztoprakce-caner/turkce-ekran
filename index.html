@@ -786,7 +786,8 @@ function playClip(sc,rate,onEnd){
 let ownPoll=0;
 function playOwn(sc,rate,onEnd){
   const v=$('ownvid');clearInterval(ownPoll);$('playOver').hidden=true;
-  if(v.getAttribute('src')!==sc.file)v.src=sc.file;
+  const src=sc.blob||sc.file;
+  if(v.getAttribute('src')!==src)v.src=src;
   const start=()=>{
     try{v.currentTime=sc.s}catch(e){}
     v.playbackRate=rate||1;v.muted=false;
@@ -806,6 +807,18 @@ function playOwn(sc,rate,onEnd){
 // <video> on another site. Drive videos therefore use Drive's own embedded player: the learner taps ▶ there,
 // and the answer timer starts after roughly the clip's length.
 let driveTimer=0;
+// Owner's C1 videos fetched as base64 from the Apps Script web app (it only serves files from the C1 folder)
+const ownBlobs={};
+function fetchOwn(sc){
+  if(ownBlobs[sc.id])return ownBlobs[sc.id];
+  if(!LB_URL)return Promise.reject(new Error('no server'));
+  ownBlobs[sc.id]=fetch(LB_URL+'?video='+encodeURIComponent(sc.drive)).then(r=>r.json()).then(j=>{
+    if(!j.ok)throw new Error(j.error||'error');
+    const bin=atob(j.b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([u],{type:j.mime||'video/mp4'}));
+  }).catch(e=>{delete ownBlobs[sc.id];throw e});
+  return ownBlobs[sc.id];
+}
 function showDrive(sc,onEnd){
   clearTimeout(driveTimer);
   $('ownvid').hidden=true;$('shield').hidden=true;
@@ -823,7 +836,14 @@ function showClip(sc){
     $('mask').hidden=true;$('shield').classList.add('full');
     $('sub').textContent='';$('sub').hidden=true;
     $('tag').textContent='Видео автора · C1';
-    if(sc.drive){showDrive(sc,startTimer);return}
+    if(sc.drive){
+      // fetch the file through the owner's Apps Script (plays in our own player: autoplay, auto-stop, no Drive UI);
+      // if that fails, fall back to Drive's embedded player
+      const vm=$('vmsg');vm.textContent='Загружаем видео…';vm.hidden=false;$('ownvid').hidden=true;
+      fetchOwn(sc).then(url=>{if(!R||R.list[R.i]!==sc)return;sc.blob=url;vm.hidden=true;$('ownvid').hidden=false;playOwn(sc,1,startTimer)})
+        .catch(()=>{if(!R||R.list[R.i]!==sc)return;vm.hidden=true;showDrive(sc,startTimer)});
+      return;
+    }
     playOwn(sc,1,startTimer);return;
   }
   // Easy Turkish videos have subtitles burned into the picture: cover them; series clips play full-frame
@@ -841,7 +861,8 @@ function resetStage(){
 function replay(rate){
   const sc=R&&R.list[R.i];if(!sc)return;
   const cb=R.answered?null:startTimer;
-  if(sc.kind==='clip'&&sc.drive)showDrive(sc,cb);
+  if(sc.kind==='clip'&&sc.drive&&sc.blob)playOwn(sc,rate||1,cb);
+  else if(sc.kind==='clip'&&sc.drive)showDrive(sc,cb);
   else if(sc.kind==='clip'&&sc.file)playOwn(sc,rate||1,cb);
   else if(sc.kind==='clip'){if(window.YT&&window.YT.Player)playClip(sc,rate||1,cb)}
   else speak(sc.t,sc.g,rate||RATES[P.speed],cb);
@@ -997,6 +1018,7 @@ function startRound(review,video){
   }
   if(!list.length)return;
   R={list,i:0,pts:0,cor:0,miss:[],review,video:!!video};
+  list.forEach(s=>{if(s.own&&s.drive)fetchOwn(s).catch(()=>{})}); // start downloading C1 videos right away
   show('play');showScene();
 }
 function showScene(){
