@@ -203,7 +203,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
     <button type="button" class="vbanner" id="videoBtn">
       <span class="vb-eyebrow">Новое · видео-режим</span>
       <span class="vb-title">Настоящая турецкая речь ›</span>
-      <span class="vb-sub" id="vbSub">Сериалы «Эзель», «Чёрная любовь», «Европейская сторона» и Easy Turkish</span>
+      <span class="vb-sub" id="vbSub">6 турецких сериалов и ролики Easy Turkish</span>
     </button>
 
     <div class="stats">
@@ -433,7 +433,7 @@ const RAW=[
 ['ev8','ev','u','f','Ayakkabılarını çıkarır mısın? Sana terlik vereyim.','Снимешь обувь? Я дам тебе тапочки.','Обувь можно не снимать, тапочки не нужны.','ayakkabı=обувь | çıkarmak=снимать | terlik=тапочки | vereyim=дам-ка']
 ];
 // Real clips: id, YouTube id, start s, end s, topic, Turkish (from the video's own captions), correct RU, distractor RU, glossary
-const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал'};
+const VSRC={mGV2j3rmWHg:'Easy Turkish · Погода и времена года',QY_CsrSxk88:'Easy Turkish · Что турки едят на завтрак',BgKf9ZSFg2Y:'Easy Turkish · Где мой телефон?',qZewvo2CPvU:'Easy Turkish · Дом нашей мечты',gG_NpAk04Ys:'Easy Turkish · Воспоминания о детстве',FSo8aRocl9w:'«Эзель», 1-я серия · официальный канал',fVNzewv_2oU:'«Чёрная любовь» (Kara Sevda), 1-я серия · официальный канал','3GgkE5klW-o':'«Европейская сторона» (Avrupa Yakası), 1-я серия · официальный канал',YCdLPBzOWKk:'«Фатмагюль» (Fatmagül’ün Suçu Ne?), 1-я серия · официальный канал','YjEfvVX-V9c':'«Кузей Гюней» (Kuzey Güney), 1-я серия · официальный канал',IB7OroiVwPA:'«Листопад» (Yaprak Dökümü), 1-я серия · официальный канал'};
 const RAWV=[
 ['w1','mGV2j3rmWHg',0.1,4.2,'Погода','Emine, bugün hava biraz soğuk, değil mi?','Эмине, сегодня немного холодно, правда?','Эмине, сегодня довольно жарко, правда?','hava=погода | biraz=немного | soğuk=холодный | değil mi?=не так ли?'],
 ['w2','mGV2j3rmWHg',8.5,13.0,'Погода','Sabah evden çıkarken gerçekten çok üşüdüm.','Утром, выходя из дома, я очень замёрзла.','Утром, выходя из дома, я забыла зонт.','çıkarken=выходя | gerçekten=по-настоящему | üşümek=мёрзнуть'],
@@ -507,7 +507,45 @@ const RAWS=[
 ['ay2','3GgkE5klW-o',124.1,126.8,'Европейская сторона','Zamane gençleri bunlar.','Вот она, нынешняя молодёжь.','Вот они, наши старики.','zamane=нынешний, современный | gençler=молодёжь | bunlar=эти'],
 ['ay3','3GgkE5klW-o',460.5,465.4,'Европейская сторона','Gitmeyin kızın üstüne, yarın öbür gün özlersiniz.','Не давите на девочку, не сегодня завтра будете по ней скучать.','Не ходите к девочке, завтра она сама придёт.','üstüne gitmek=давить на кого-то | yarın öbür gün=не сегодня завтра | özlemek=скучать'],
 ['ay5','3GgkE5klW-o',299.5,302.0,'Европейская сторона','Sabah sabah ya!','Ну с самого же утра!','Ну наконец-то вечер!','sabah sabah=с самого утра (недовольно) | ya=ну, же'],
-['ay6','3GgkE5klW-o',805.3,809.2,'Европейская сторона','Nasıl desem... Sizin aile böyle biraz...','Как бы сказать… Ваша семья немного такая…','Скажу прямо: ваша семья очень хорошая.','nasıl desem=как бы сказать | aile=семья | biraz=немного']
+['ay6','3GgkE5klW-o',805.3,809.2,'Европейская сторона','Nasıl desem... Sizin aile böyle biraz...','Как бы сказать… Ваша семья немного такая…','Скажу прямо: ваша семья очень хорошая.','nasıl desem=как бы сказать | aile=семья | biraz=немного'],
+
+['f1','YCdLPBzOWKk',354.2,357.3,'Фатмагюль','Hoş geldin. Hoş bulduk.','— С приездом! — Спасибо, рад вернуться.','— До свидания! — Счастливо оставаться.','hoş geldin=добро пожаловать | hoş bulduk=обязательный ответ гостя'],
+['f2','YCdLPBzOWKk',429.4,431.7,'Фатмагюль','Ne var ne yok?','Как дела, что нового?','Что ты ищешь?','ne var ne yok=что есть, чего нет — «как жизнь?»'],
+['f3','YCdLPBzOWKk',432.6,435.0,'Фатмагюль','İyi, hadi o zaman, gidelim.','Хорошо, ну тогда пойдём.','Ладно, тогда я останусь.','hadi=давай | o zaman=тогда | gidelim=пойдём'],
+['f4','YCdLPBzOWKk',681.4,684.0,'Фатмагюль','Ee, ne yapıyorsun? İyidir.','— Ну, как поживаешь? — Неплохо.','— Ну, что ты сейчас готовишь? — Суп.','ne yapıyorsun=что делаешь; часто значит «как ты?» | iyidir=нормально'],
+['f5','YCdLPBzOWKk',793.3,795.5,'Фатмагюль','Seni çok özledim.','Как же я по тебе скучаю!','Мне без тебя было спокойно.','seni=тебя | özlemek=скучать | çok=очень'],
+['f6','YCdLPBzOWKk',1088.9,1091.6,'Фатмагюль','Tamam, hadi, ben aşağıda bekliyorum.','Ладно, давай, я жду внизу.','Ладно, давай, я поднимусь наверх.','aşağıda=внизу | yukarı=наверх | beklemek=ждать'],
+['f7','YCdLPBzOWKk',1239.6,1241.6,'Фатмагюль','Artık sıkıldım.','Мне уже надоело.','Мне уже лучше.','artık=уже, больше | sıkılmak=скучать, надоедать'],
+['f9','YCdLPBzOWKk',862.6,865.3,'Фатмагюль','Hoş geldin Mustafa Bey.','Добро пожаловать, Мустафа-бей.','До свидания, Мустафа-бей.','bey=господин (после имени) | güle güle=до свидания (уходящему)'],
+['f10','YCdLPBzOWKk',1247.0,1249.2,'Фатмагюль','Çok teşekkür ederim.','Большое спасибо.','Не за что.','teşekkür ederim=спасибо | rica ederim=не за что'],
+
+['kg1','YjEfvVX-V9c',220.1,223.0,'Кузей Гюней','Sağ olun. Afiyet olsun.','Спасибо. Приятного аппетита.','Пожалуйста. Будьте здоровы.','sağ olun=спасибо (букв. «будьте здоровы») | afiyet olsun=приятного аппетита'],
+['kg2','YjEfvVX-V9c',224.2,230.0,'Кузей Гюней','Saat 9.30 gibi çıkarız. Sen de geleceksin, değil mi?','Выйдем около половины десятого. Ты ведь тоже пойдёшь?','Вернёмся около половины десятого. Ты ведь останешься дома?','dokuz buçuk=9:30 | gibi=около | çıkarız=выйдем | geleceksin=придёшь'],
+['kg3','YjEfvVX-V9c',264.6,266.2,'Кузей Гюней','Hadi, kolay gelsin.','Ну, лёгкой работы!','Ну, приятного аппетита!','kolay gelsin=пусть будет легко — говорят работающему'],
+['kg4','YjEfvVX-V9c',323.3,325.4,'Кузей Гюней','Abi, bana bir çay daha ver.','Брат, дай мне ещё один чай.','Брат, мне больше чая не надо.','abi=старший брат, обращение к мужчине | bir … daha=ещё один | ver=дай'],
+['kg5','YjEfvVX-V9c',510.3,514.7,'Кузей Гюней','Aklını başına topla. Kimseye de bulaşma artık. Tamam mı?','Возьмись за ум. И больше ни с кем не связывайся. Договорились?','Ни о чём не думай. И звони всем подряд. Договорились?','aklını başına toplamak=взяться за ум | bulaşmak=связываться | tamam mı=договорились?'],
+['kg6','YjEfvVX-V9c',554.2,557.5,'Кузей Гюней','Tamam. Geçmiş olsun. Sağ ol.','— Хорошо. Пусть всё останется позади. — Спасибо.','— Хорошо. С праздником тебя. — Спасибо.','geçmiş olsun=пусть пройдёт: сочувствие после беды или болезни | sağ ol=спасибо'],
+['kg7','YjEfvVX-V9c',568.5,570.3,'Кузей Гюней',"Allah'a emanet olun. Eyvallah.",'— Храни вас Бог. — Спасибо.','— Приятного аппетита. — Спасибо.','Allaha emanet ol=храни тебя Бог (при прощании) | eyvallah=спасибо (разг.)'],
+['kg8','YjEfvVX-V9c',720.2,725.5,'Кузей Гюней','Arabayı değiştirmişsiniz. Evi değiştirmediniz inşallah.','Вы, я смотрю, сменили машину. Надеюсь, дом-то не сменили?','Вы, я смотрю, купили дом. Надеюсь, машину не продали?','değiştirmişsiniz=вы, оказывается, сменили (-mış — «вижу/оказывается») | inşallah=надеюсь'],
+['kg9','YjEfvVX-V9c',757.3,759.6,'Кузей Гюней','Ama şimdilik her şey yerli yerinde.','Но пока всё на своих местах.','Но пока всё вверх дном.','şimdilik=пока что | yerli yerinde=на своём месте'],
+
+['yd1','IB7OroiVwPA',38.0,43.1,'Листопад','Bir babanın çocuklarına bırakacağı en değerli miras temiz bir isimdir.','Самое ценное наследство, которое отец может оставить детям, — честное имя.','Самое ценное наследство, которое отец может оставить детям, — большой дом.','miras=наследство | bırakmak=оставлять | değerli=ценный | temiz isim=честное имя'],
+['yd2','IB7OroiVwPA',61.9,66.0,'Листопад','Ben buldum, sen bulamadın mı? Ya ne fenasın ya.','— Я нашла, а ты не смогла? — Ну ты и вредина!','— Я не нашла, а ты нашла? — Ну ты и молодец!','bulmak=находить | bulamadın=не смогла найти | fena=вредный (о человеке, шутливо)'],
+['yd3','IB7OroiVwPA',73.5,75.1,'Листопад','Ben de oynayacağım.','Я тоже буду играть.','Я не буду играть.','ben de=я тоже | oynayacağım=буду играть'],
+['yd4','IB7OroiVwPA',76.8,79.2,'Листопад','Okuma yazma bilmiyorsun ki.','Ты же не умеешь читать и писать.','Ты же уже умеешь читать и писать.','okuma yazma=грамота (чтение и письмо) | bilmiyorsun=не знаешь | ki=же'],
+['yd5','IB7OroiVwPA',81.8,83.9,'Листопад','Sayıları sen say o zaman.','Тогда ты считай цифры.','Тогда я сама посчитаю.','sayı=число | saymak=считать | o zaman=тогда'],
+['yd6','IB7OroiVwPA',103.5,105.4,'Листопад','Kendi evimize gidiyoruz.','Мы едем в наш собственный дом.','Мы едем в гости к друзьям.','kendi=собственный | evimize=в наш дом | gidiyoruz=едем'],
+['yd7','IB7OroiVwPA',112.5,114.7,'Листопад','Her şey çok daha iyi olacak.','Всё будет гораздо лучше.','Всё было гораздо лучше.','her şey=всё | çok daha=гораздо | olacak=будет'],
+['yd8','IB7OroiVwPA',109.7,111.3,'Листопад','Yapma, rica ederim.','Перестань, прошу тебя.','Не за что, пожалуйста.','yapma=не надо, перестань | rica ederim=прошу (а ещё «не за что»)'],
+['yd9','IB7OroiVwPA',608.2,609.9,'Листопад','Geldik mi baba?','Мы приехали, папа?','Мы уезжаем, папа?','geldik=мы пришли/приехали | mi=вопрос'],
+['yd10','IB7OroiVwPA',632.5,635.7,'Листопад','Bir şey unutmadık, değil mi? Sakin ol hanım, her şeyi aldık.','— Мы ничего не забыли? — Успокойся, жена, мы всё взяли.','— Мы что-то забыли? — Да, жена, мы забыли чемодан.','unutmak=забывать | sakin ol=успокойся | hanım=жена, хозяйка | aldık=взяли'],
+['yd11','IB7OroiVwPA',637.4,639.5,'Листопад','Ne çok tren var.','Сколько тут поездов!','Здесь совсем нет поездов.','ne çok=как много | tren=поезд'],
+['yd12','IB7OroiVwPA',643.1,647.6,'Листопад','Siz burada durun, ben bir hamal bulup geliyorum. Ben de geleyim babacığım.','— Вы стойте здесь, я найду носильщика и вернусь. — Можно я с тобой, папочка?','— Идите за мной, я сам понесу вещи. — Я останусь здесь, папочка.','durun=стойте | hamal=носильщик | bulup geliyorum=найду и приду | babacığım=папочка'],
+['yd13','IB7OroiVwPA',650.0,651.9,'Листопад','Bırakma şunun elini.','Не отпускай её руку.','Отпусти её руку.','bırakma=не отпускай | el=рука'],
+['yd14','IB7OroiVwPA',674.7,678.3,'Листопад',"Anadolu'dan gelen trenlerin son durağı burası.",'Здесь конечная остановка поездов из Анатолии.','Отсюда поезда отправляются в Анатолию.','gelen=приходящий | son durak=конечная остановка | burası=это место'],
+['yd15','IB7OroiVwPA',688.2,690.3,'Листопад',"Kızıltoprak'a nasıl gidebiliriz?",'Как нам добраться до Кызылтопрака?','Сколько стоит билет до Кызылтопрака?','nasıl=как | gidebiliriz=можем доехать'],
+['yd16','IB7OroiVwPA',691.5,693.7,'Листопад','Şuradaki gişeye sorun isterseniz.','Спросите, если хотите, вон в той кассе.','Купите, если хотите, билет у меня.','şuradaki=вон тот | gişe=касса | sorun=спросите | isterseniz=если хотите'],
+['yd17','IB7OroiVwPA',697.0,699.2,'Листопад','Adam bizi İstanbullu zannetti.','Этот человек принял нас за стамбульцев.','Этот человек сразу понял, что мы приезжие.','İstanbullu=стамбулец | zannetmek=считать, принимать за']
 ];
 // clip topic -> scene topic chip, so a chosen topic mixes its scenes with matching real clips
 const CLIP_TP={'Погода':'tanisma','Детство':'tanisma','Завтрак':'kafe','Где телефон?':'ev','Дом мечты':'ev'};
@@ -532,7 +570,10 @@ h1 A1 h2 B1 h3 A2 h4 A2 h5 A2 h6 B1 h7 B1 h8 B1
 c1 A1 c2 A2 c3 B1 c4 B1 c5 B1 c6 A2 c7 B2 c8 B1
 e1 B1 e2 A2 e3 B1 e4 B1 e5 A2 e6 B2 e7 B1 e8 A2
 ks1 B1 ks2 A2 ks3 B1 ks4 A2 ks5 B1 ks6 A1 ks7 A2
-ay1 A2 ay2 B1 ay3 B2 ay5 A2 ay6 B1`.trim().split(/\s+/);
+ay1 A2 ay2 B1 ay3 B2 ay5 A2 ay6 B1
+f1 A1 f2 A2 f3 A1 f4 A2 f5 A1 f6 A2 f7 A2 f9 A1 f10 A1
+kg1 A1 kg2 A2 kg3 A2 kg4 A1 kg5 B1 kg6 A2 kg7 A2 kg8 B1 kg9 B1
+yd1 B2 yd2 B1 yd3 A1 yd4 A2 yd5 A2 yd6 A2 yd7 A2 yd8 B1 yd9 A1 yd10 B1 yd11 A1 yd12 B1 yd13 A2 yd14 B1 yd15 A2 yd16 B1 yd17 B1`.trim().split(/\s+/);
 for(let i=0;i<CEFR.length;i+=2){const s=SCENES.concat(CLIPS).find(x=>x.id===CEFR[i]);if(s)s.cefr=CEFR[i+1]}
 const BYID=Object.fromEntries(SCENES.concat(CLIPS).map(s=>[s.id,s]));
 
@@ -757,7 +798,7 @@ function renderHome(){
   $('stRev').textContent=P.review.length;
   $('boardBtn').hidden=!LB_URL;$('whoRow').hidden=!(LB_URL&&P.name);$('whoName').textContent=P.name;
   $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
-  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: сериалы «Эзель», «Чёрная любовь», «Европейская сторона» и ролики Easy Turkish`;
+  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: 6 турецких сериалов и ролики Easy Turkish`;
   for(const b of $('lvlSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.lvl);
   $('topics').innerHTML=TOPICS.map(([id,ru])=>`<button type="button" class="chip" id="tp-${id}" data-v="${id}" aria-pressed="${P.topic===id}">${ru}</button>`).join('');
   for(const b of $('modeSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.mode);
