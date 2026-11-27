@@ -798,7 +798,7 @@ function playOwn(sc,rate,onEnd){
   v.onerror=()=>{clearInterval(ownPoll);if(!sc.drive)return;
     v.hidden=true;$('shield').hidden=true;const w=$('drivewrap');w.hidden=false;
     w.innerHTML=`<iframe src="https://drive.google.com/file/d/${sc.drive}/preview" allow="autoplay" allowfullscreen></iframe>`;
-    $('sub').hidden=P.mode!=='sub';setTimeout(()=>{onEnd&&onEnd()},(sc.e-sc.s+3)*1000)};
+    $('sub').hidden=true;setTimeout(()=>{onEnd&&onEnd()},(sc.e-sc.s+3)*1000)};
   if(v.readyState>=1)start();else v.addEventListener('loadedmetadata',start,{once:true});
   ownPoll=setInterval(()=>{if(v.currentTime>=sc.e-0.05||v.ended){clearInterval(ownPoll);v.pause();onEnd&&onEnd()}},100);
 }
@@ -819,8 +819,9 @@ function showClip(sc){
   $('ytwrap').hidden=!!sc.file;$('ownvid').hidden=!sc.file;$('shield').hidden=false;$('vmsg').hidden=true;
   $('drivewrap').hidden=true;$('drivewrap').innerHTML='';
   if(sc.file){
+    // C1 (owner's videos): listening only, the Turkish text is never shown
     $('mask').hidden=true;$('shield').classList.add('full');
-    $('sub').textContent=sc.t;$('sub').hidden=P.mode!=='sub';
+    $('sub').textContent='';$('sub').hidden=true;
     $('tag').textContent='Видео автора · C1';
     if(sc.drive){showDrive(sc,startTimer);return}
     playOwn(sc,1,startTimer);return;
@@ -1039,9 +1040,9 @@ function answer(btn){
   save();
   const fb=$('fb');fb.hidden=false;fb.className='fb '+(ok?'ok':'bad');fb.textContent=ok?`✓ Верно · +${pts}`:'✗ Неверно · фраза добавлена в повторение';
   $('ptsNow').textContent=ochki(R.pts);
-  if(sc.kind==='clip'&&sc.burn)$('maskTxt').textContent=sc.t;else{$('sub').textContent=sc.t;$('sub').hidden=false}
+  if(sc.own){}else if(sc.kind==='clip'&&sc.burn)$('maskTxt').textContent=sc.t;else{$('sub').textContent=sc.t;$('sub').hidden=false}
   const src=sc.file?'<div class="src">Видео автора курса</div>':sc.kind==='clip'?`<div class="src">Источник: <a href="https://www.youtube.com/watch?v=${sc.vid}&t=${Math.floor(sc.s)}s" target="_blank" rel="noopener">${esc(VSRC[sc.vid]||'YouTube')} ↗</a></div>`:'';
-  $('gloss').innerHTML=`<div class="tr">${esc(sc.t)}</div><div class="ru">${esc(sc.r)}</div><dl>${sc.w.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('')}</dl>${src}`;
+  $('gloss').innerHTML=`${sc.own?'':`<div class="tr">${esc(sc.t)}</div>`}<div class="ru">${esc(sc.r)}</div><dl>${sc.w.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('')}</dl>${src}`;
   $('gloss').hidden=false;$('actions').hidden=false;
   $('nextBtn').textContent=R.i+1<R.list.length?'Дальше →':'Итоги →';
   $('nextBtn').focus({preventScroll:true});
@@ -1052,7 +1053,7 @@ function finish(){
   $('doneScore').textContent=R.cor+'/'+R.list.length;
   $('doneLine').textContent=`+${ochki(R.pts)} · всего ${ochki(P.pts)}`;
   $('missWrap').hidden=!R.miss.length;
-  $('missList').innerHTML=R.miss.map(s=>`<div><b>${esc(s.t)}</b><span>${esc(s.r)}</span></div>`).join('');
+  $('missList').innerHTML=R.miss.map(s=>s.own?`<div><b>${esc(s.r)}</b><span>Видео автора · C1</span></div>`:`<div><b>${esc(s.t)}</b><span>${esc(s.r)}</span></div>`).join('');
   $('doneReview').hidden=!P.review.length;
   $('doneReview').textContent=`Повторить ошибки (${P.review.length})`;
   P.rounds++;save();
