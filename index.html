@@ -131,6 +131,26 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
 .src a{color:var(--accent)}
 
 /* done */
+/* name + leaderboard */
+.who{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.who b{color:var(--ink)}
+.sent{font-size:13px}
+.bar-title{font-weight:700;color:var(--ink)}
+.board{display:flex;flex-direction:column;gap:6px}
+.brow{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto auto 2.6em;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-variant-numeric:tabular-nums}
+.brow.head{background:none;border:0;padding:0 12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.brow .rk{font-weight:700;color:var(--muted);text-align:center}
+.brow .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .pt{font-weight:700;color:var(--gold);text-align:right}
+.brow .ac{color:var(--muted);font-size:13px;text-align:right}
+.brow .lv{font-size:12px;font-weight:700;text-align:center;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 0}
+.brow.me{border-color:var(--accent);background:var(--accent-soft)}
+.bempty{text-align:center;color:var(--muted);padding:24px 8px}
+.dlg{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(5,15,18,.55);padding:16px}
+.dlg-card{background:var(--surface);color:var(--ink);border-radius:18px;padding:22px 18px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px}
+.dlg-card h2{font-family:var(--font-display);font-size:20px;margin:0}
+.dlg-card p{margin:0;color:var(--muted);font-size:14px}
+.dlg-card input{font:inherit;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .done-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 18px;text-align:center;display:flex;flex-direction:column;gap:6px}
 .done-card h2{font-family:var(--font-display);font-size:22px;margin:0}
 .done-card .big{font-family:var(--font-display);font-size:42px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
@@ -240,6 +260,11 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
     <div class="cta">
       <button type="button" class="primary" id="startBtn">Начать · 10 сцен</button>
       <button type="button" class="secondary" id="reviewBtn">Повторить ошибки</button>
+      <button type="button" class="secondary" id="boardBtn" hidden>🏆 Рейтинг игроков</button>
+    </div>
+    <div class="who" id="whoRow" hidden>
+      <span>Вы играете как <b id="whoName"></b></span>
+      <button type="button" class="link" id="renameBtn">Изменить имя</button>
     </div>
     <div class="foot" id="resetRow">
       <button type="button" class="link" id="resetBtn">Сбросить прогресс</button>
@@ -281,6 +306,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
       <h2>Раунд окончен</h2>
       <div class="big" id="doneScore">7/10</div>
       <p id="doneLine"></p>
+      <p class="sent" id="doneSent" hidden></p>
     </div>
     <div class="group" id="missWrap">
       <div class="label">Фразы для повторения</div>
@@ -289,9 +315,35 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
     <div class="cta">
       <button type="button" class="primary" id="againRound">Ещё 10 сцен</button>
       <button type="button" class="secondary" id="doneReview">Повторить ошибки</button>
+      <button type="button" class="secondary" id="doneBoard" hidden>🏆 Рейтинг игроков</button>
       <button type="button" class="secondary" id="homeBtn">На главную</button>
     </div>
   </section>
+
+  <!-- LEADERBOARD -->
+  <section id="board" class="app" hidden>
+    <div class="bar">
+      <button type="button" id="boardBack">← Назад</button>
+      <span class="bar-title">Рейтинг игроков</span>
+      <button type="button" id="boardRefresh">↻</button>
+    </div>
+    <div class="seg" id="boardSeg">
+      <button type="button" id="bt-week" data-v="week" aria-pressed="true">Эта неделя</button>
+      <button type="button" id="bt-total" data-v="total" aria-pressed="false">Всё время</button>
+    </div>
+    <div class="board" id="boardList"></div>
+    <p class="hint">Очки отправляются в рейтинг после каждого раунда. Неделя начинается в понедельник. Уровень — тот, который игрок слушает чаще всего.</p>
+  </section>
+</div>
+
+<div class="dlg" id="nameDlg" hidden>
+  <form class="dlg-card" id="nameForm">
+    <h2>Как вас зовут?</h2>
+    <p>Имя увидят другие игроки в рейтинге. Регистрация не нужна — достаточно ввести его один раз.</p>
+    <input id="nameInput" maxlength="30" autocomplete="nickname" placeholder="Например, Анна" required>
+    <button type="submit" class="primary">Сохранить</button>
+    <button type="button" class="link" id="nameSkip">Играть без рейтинга</button>
+  </form>
 </div>
 
 <script>
@@ -486,9 +538,13 @@ const BYID=Object.fromEntries(SCENES.concat(CLIPS).map(s=>[s.id,s]));
 
 /* ---------- storage ---------- */
 const KEY='tr-ekran-v1';
-let P={pts:0,ans:0,cor:0,review:[],seen:[],seenV:[],topic:'all',mode:'nosub',len:'all',lvl:'all',voice:'auto',speed:'normal'};
+let P={pts:0,ans:0,cor:0,review:[],seen:[],seenV:[],uid:'',name:'',wk:{k:'',p:0},lvlc:{},rounds:0,topic:'all',mode:'nosub',len:'all',lvl:'all',voice:'auto',speed:'normal'};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)P=Object.assign(P,s)}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+// Leaderboard endpoint: the Apps Script web app bound to the owner's Google Sheet (empty = leaderboard hidden)
+const LB_URL=(new URLSearchParams(location.search).get('lb'))||'https://script.google.com/macros/s/AKfycbx0YcdEEBqeWFLH4NZya1dLyH4My2HvbH1EzxlLh2q7fKisu5rm8EHoNPvE0-0cwpEu/exec';
+// anonymous per-device id: one leaderboard row per device, no account needed
+if(!P.uid){try{P.uid=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('')}catch(e){P.uid=(Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,24)}save()}
 
 const $=id=>document.getElementById(id);
 function plural(n,a,b,c){const m10=n%10,m100=n%100;if(m10===1&&m100!==11)return a;if(m10>=2&&m10<=4&&(m100<10||m100>=20))return b;return c}
@@ -699,6 +755,7 @@ function renderHome(){
   $('stPts').textContent=P.pts;
   $('stAcc').textContent=P.ans?Math.round(P.cor/P.ans*100)+'%':'–';
   $('stRev').textContent=P.review.length;
+  $('boardBtn').hidden=!LB_URL;$('whoRow').hidden=!(LB_URL&&P.name);$('whoName').textContent=P.name;
   $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
   $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: сериалы «Эзель», «Чёрная любовь», «Европейская сторона» и ролики Easy Turkish`;
   for(const b of $('lvlSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.lvl);
@@ -740,7 +797,7 @@ $('resetRow').addEventListener('click',e=>{
 
 /* ---------- round ---------- */
 let R=null,raf=0;
-function show(id){for(const s of ['home','play','done'])$(s).hidden=s!==id;window.scrollTo(0,0)}
+function show(id){for(const s of ['home','play','done','board'])$(s).hidden=s!==id;window.scrollTo(0,0)}
 function startRound(review,video){
   let list;
   if(review){list=shuffle(P.review.map(id=>BYID[id]).filter(Boolean)).slice(0,10)}
@@ -791,6 +848,8 @@ function answer(btn){
   const pts=ok?LV[sc.lv].base+Math.round(R.frac*10):0;
   R.pts+=pts;if(ok)R.cor++;else R.miss.push(sc);
   P.ans++;if(ok)P.cor++;P.pts+=pts;
+  const wk=isoWeek();if(P.wk.k!==wk)P.wk={k:wk,p:0};P.wk.p+=pts;
+  if(sc.cefr)P.lvlc[sc.cefr]=(P.lvlc[sc.cefr]||0)+1;
   const seenArr=sc.kind==='clip'?P.seenV:P.seen;if(!seenArr.includes(sc.id))seenArr.push(sc.id);
   if(!ok&&!P.review.includes(sc.id))P.review.push(sc.id);
   if(ok&&R.review)P.review=P.review.filter(id=>id!==sc.id);
@@ -813,18 +872,69 @@ function finish(){
   $('missList').innerHTML=R.miss.map(s=>`<div><b>${esc(s.t)}</b><span>${esc(s.r)}</span></div>`).join('');
   $('doneReview').hidden=!P.review.length;
   $('doneReview').textContent=`Повторить ошибки (${P.review.length})`;
+  P.rounds++;save();
+  const ds=$('doneSent');ds.hidden=!(LB_URL&&P.name);$('doneBoard').hidden=!LB_URL;
+  if(LB_URL&&P.name){ds.textContent='Отправляем результат в рейтинг…';
+    pushScore().then(ok=>{ds.textContent=ok?'✓ Результат в рейтинге':'Не удалось отправить — отправим после следующего раунда'})}
   show('done');
 }
+
+/* ---------- leaderboard (Google Sheet via Apps Script) ---------- */
+function isoWeek(date=new Date()){
+  const d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));const day=d.getUTCDay()||7;
+  d.setUTCDate(d.getUTCDate()+4-day);const y0=new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return d.getUTCFullYear()+'-W'+String(Math.ceil(((d-y0)/864e5+1)/7)).padStart(2,'0');
+}
+function topLevel(){let best='',n=0;for(const [k,v] of Object.entries(P.lvlc||{}))if(v>n){n=v;best=k}return best}
+function pushScore(){
+  if(!LB_URL||!P.name)return Promise.resolve(false);
+  const wk=isoWeek();if(P.wk.k!==wk){P.wk={k:wk,p:0};save()}
+  const body={id:P.uid,name:P.name,total:P.pts,week:P.wk.p,weekKey:wk,acc:P.ans?Math.round(P.cor/P.ans*100):0,lvl:topLevel(),rounds:P.rounds};
+  // text/plain keeps this a "simple" request, so Apps Script answers without a CORS preflight
+  return fetch(LB_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)})
+    .then(r=>r.json()).then(j=>!!j.ok).catch(()=>false);
+}
+let boardTab='week',boardRows=null,nameAsked=false,afterName=null;
+function openNameDlg(then){afterName=then||null;$('nameInput').value=P.name||'';$('nameDlg').hidden=false;setTimeout(()=>$('nameInput').focus(),50)}
+// ask for a name once, before the first round; "play without rating" is remembered for this visit only
+function withName(then){if(LB_URL&&!P.name&&!nameAsked)openNameDlg(then);else then()}
+$('nameForm').addEventListener('submit',e=>{
+  e.preventDefault();const v=$('nameInput').value.replace(/\s+/g,' ').trim().slice(0,30);if(!v)return;
+  P.name=v;save();$('nameDlg').hidden=true;renderHome();pushScore();const f=afterName;afterName=null;f&&f();
+});
+$('nameSkip').addEventListener('click',()=>{nameAsked=true;$('nameDlg').hidden=true;const f=afterName;afterName=null;f&&f()});
+$('renameBtn').addEventListener('click',()=>openNameDlg(null));
+function renderBoard(){
+  for(const b of $('boardSeg').children)b.setAttribute('aria-pressed',b.dataset.v===boardTab);
+  const el=$('boardList');
+  if(boardRows===null){el.innerHTML='<div class="bempty">Загружаем рейтинг…</div>';return}
+  if(boardRows===false){el.innerHTML='<div class="bempty">Не удалось загрузить рейтинг. Проверьте интернет и нажмите ↻.</div>';return}
+  const key=boardTab;const rows=boardRows.filter(r=>r[key]>0).sort((a,b)=>b[key]-a[key]).slice(0,100);
+  if(!rows.length){el.innerHTML=`<div class="bempty">${key==='week'?'На этой неделе ещё никто не играл. Будьте первым!':'Пока в рейтинге никого нет.'}</div>`;return}
+  const medal=['🥇','🥈','🥉'];
+  el.innerHTML='<div class="brow head"><span>#</span><span>Имя</span><span>Очки</span><span>Точн.</span><span>Ур.</span></div>'+
+    rows.map((r,i)=>`<div class="brow${r.me?' me':''}"><span class="rk">${medal[i]||i+1}</span><span class="nm">${esc(r.name)}${r.me?' (вы)':''}</span><span class="pt">${r[key]}</span><span class="ac">${r.acc}%</span><span class="lv">${esc(r.lvl||'–')}</span></div>`).join('');
+}
+function loadBoard(){
+  boardRows=null;renderBoard();
+  fetch(LB_URL+'?me='+encodeURIComponent(P.uid)).then(r=>r.json()).then(j=>{boardRows=j.ok?j.rows:false;renderBoard()}).catch(()=>{boardRows=false;renderBoard()});
+}
+function openBoard(){show('board');loadBoard()}
+$('boardBtn').addEventListener('click',openBoard);
+$('doneBoard').addEventListener('click',openBoard);
+$('boardRefresh').addEventListener('click',loadBoard);
+$('boardBack').addEventListener('click',()=>{renderHome();show('home')});
+$('boardSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;boardTab=b.dataset.v;renderBoard()});
 $('opts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(b)answer(b)});
 $('againBtn').addEventListener('click',()=>replay());
 $('slowBtn').addEventListener('click',()=>{const sc=R&&R.list[R.i];replay(sc&&sc.kind==='clip'?.75:.6)});
 $('shield').addEventListener('click',e=>{e.stopPropagation();replay()});
 $('playOver').addEventListener('click',e=>{e.stopPropagation();replay()});
-$('videoBtn').addEventListener('click',()=>startRound(false,true));
+$('videoBtn').addEventListener('click',()=>withName(()=>startRound(false,true)));
 $('nextBtn').addEventListener('click',next);
 $('exitBtn').addEventListener('click',()=>{stopSpeech();cancelAnimationFrame(raf);R=null;renderHome();show('home')});
-$('startBtn').addEventListener('click',()=>startRound(false));
-$('reviewBtn').addEventListener('click',()=>startRound(true));
+$('startBtn').addEventListener('click',()=>withName(()=>startRound(false)));
+$('reviewBtn').addEventListener('click',()=>withName(()=>startRound(true)));
 $('againRound').addEventListener('click',()=>startRound(!!(R&&R.review&&P.review.length),!!(R&&R.video)));
 $('doneReview').addEventListener('click',()=>startRound(true));
 $('homeBtn').addEventListener('click',()=>{R=null;renderHome();show('home')});
