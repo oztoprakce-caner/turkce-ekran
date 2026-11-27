@@ -123,6 +123,8 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
 #ytwrap,#ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .shield{position:absolute;left:0;right:0;top:0;bottom:30%;cursor:pointer}
 .shield.full{bottom:0}
+#ownvid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+#drivewrap,#drivewrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 .mask{position:absolute;left:0;right:0;bottom:0;height:30%;background:#0B1418;display:grid;place-items:center;color:#fff;font-weight:600;padding:0 14px;text-align:center;font-size:15px;line-height:1.35}
 .mask .muted{color:#9FB3B8;font-size:12.5px;font-weight:500}
 .playover{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);border:0;border-radius:99px;padding:12px 20px;background:rgba(255,255,255,.94);color:#111;font-weight:700;font-size:15px}
@@ -231,6 +233,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
         <button type="button" id="lvl-A2" data-v="A2">A2</button>
         <button type="button" id="lvl-B1" data-v="B1">B1</button>
         <button type="button" id="lvl-B2" data-v="B2">B2</button>
+        <button type="button" id="lvl-C1" data-v="C1">C1</button>
       </div>
     </div>
     <div class="group">
@@ -282,6 +285,8 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
     <div class="stage" id="stage">
       <div id="art"></div>
       <div id="ytwrap" hidden><div id="yt"></div></div>
+      <video id="ownvid" playsinline preload="auto" hidden></video>
+      <div id="drivewrap" hidden></div>
       <div class="shield" id="shield" hidden title="Повторить фрагмент"></div>
       <div class="mask" id="mask" hidden><span id="maskTxt"></span></div>
       <button type="button" class="playover" id="playOver" hidden>▶ Смотреть фрагмент</button>
@@ -632,7 +637,14 @@ const CLIP_TP={'Погода':'tanisma','Детство':'tanisma','Завтра
 const mkClip=(a,series)=>{const d=a[3]-a[2];return {kind:'clip',id:a[0],vid:a[1],s:a[2],e:a[3],topic:a[4],t:a[5],r:a[6],d:a[7],
   burn:!series,series,tp:series?'dizi':(CLIP_TP[a[4]]||'tanisma'),lv:d<4.5?'k':d<7?'o':'u',
   w:a[8].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}};
-const CLIPS=RAWV.map(a=>mkClip(a,false)).concat(RAWS.map(a=>mkClip(a,true)));
+// Owner's own videos (level C1 only), stored in the owner's Google Drive (folder turkce-ekran/C1-videolar,
+// each file shared "anyone with the link"): id, Drive file id, start s, end s, Turkish, correct RU, distractor RU, glossary
+const RAWU=[
+['u1','1UNgQlnpWofGfiKnzNvKqdEG8DnspKC2-',0,11.6,'Götüm dondu ama yine de sokaklar bizim evimizden daha sıcak.','Я жопу отморозил, но на улице всё равно теплее, чем у нас дома.','Я замёрз, поэтому дома мне теплее, чем на улице.','götüm dondu=груб. «жопу отморозил» — очень замёрз | yine de=всё равно | sokaklar=улицы | -den daha sıcak=теплее, чем…']
+];
+const mkOwn=a=>({kind:'clip',own:true,id:a[0],drive:a[1],file:'https://drive.usercontent.google.com/download?id='+a[1]+'&export=download',s:a[2],e:a[3],topic:'Видео автора',t:a[4],r:a[5],d:a[6],burn:false,series:false,tp:'own',cefr:'C1',lv:(a[3]-a[2])<4.5?'k':(a[3]-a[2])<7?'o':'u',
+  w:a[7].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})});
+const CLIPS=RAWV.map(a=>mkClip(a,false)).concat(RAWS.map(a=>mkClip(a,true)),RAWU.map(mkOwn));
 const SCENES=RAW.map(a=>({id:a[0],tp:a[1],lv:a[2],g:a[3],t:a[4],r:a[5],d:a[6],w:a[7].split('|').map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})}));
 // CEFR level of each phrase (grammar + vocabulary): A1 basics, A2 everyday, B1 compound sentences/tenses, B2 bookish or idiomatic
 const CEFR=`ta1 A1 ta2 A1 ta3 A1 ta4 A2 ta5 A2 ta6 A2 ta7 B1 ta8 A2 ta9 A2
@@ -729,7 +741,7 @@ function loadYT(){
   });
   return ytLoad;
 }
-function stopVideo(){clearInterval(ytPoll);try{YTP&&YTP.pauseVideo&&YTP.pauseVideo()}catch(e){}}
+function stopVideo(){clearInterval(ytPoll);try{YTP&&YTP.pauseVideo&&YTP.pauseVideo()}catch(e){}clearInterval(ownPoll);try{$('ownvid').pause()}catch(e){}clearTimeout(driveTimer);const w=$('drivewrap');if(w&&!w.hidden)w.innerHTML=''}
 function setPlayOver(txt){const b=$('playOver');b.textContent=txt;b.hidden=false}
 function playClip(sc,rate,onEnd){
   clearInterval(ytPoll);$('playOver').hidden=true;
@@ -770,9 +782,49 @@ function playClip(sc,rate,onEnd){
   }
   YTP.__pending=go;
 }
+// Owner's own video files (C1): plain <video>, same start/stop rules as the YouTube clips
+let ownPoll=0;
+function playOwn(sc,rate,onEnd){
+  const v=$('ownvid');clearInterval(ownPoll);$('playOver').hidden=true;
+  if(v.getAttribute('src')!==sc.file)v.src=sc.file;
+  const start=()=>{
+    try{v.currentTime=sc.s}catch(e){}
+    v.playbackRate=rate||1;v.muted=false;
+    const p=v.play();
+    // sound autoplay blocked: play muted and offer the sound button
+    if(p&&p.catch)p.catch(()=>{v.muted=true;v.play().then(()=>setPlayOver('🔊 Включить звук')).catch(()=>setPlayOver('▶ Смотреть фрагмент'))});
+  };
+  // if Google refuses the direct file, fall back to Drive's own player (no auto-stop there)
+  v.onerror=()=>{clearInterval(ownPoll);if(!sc.drive)return;
+    v.hidden=true;$('shield').hidden=true;const w=$('drivewrap');w.hidden=false;
+    w.innerHTML=`<iframe src="https://drive.google.com/file/d/${sc.drive}/preview" allow="autoplay" allowfullscreen></iframe>`;
+    $('sub').hidden=P.mode!=='sub';setTimeout(()=>{onEnd&&onEnd()},(sc.e-sc.s+3)*1000)};
+  if(v.readyState>=1)start();else v.addEventListener('loadedmetadata',start,{once:true});
+  ownPoll=setInterval(()=>{if(v.currentTime>=sc.e-0.05||v.ended){clearInterval(ownPoll);v.pause();onEnd&&onEnd()}},100);
+}
+// Google Drive serves files with Cross-Origin-Resource-Policy: same-site, so browsers refuse to play them in a
+// <video> on another site. Drive videos therefore use Drive's own embedded player: the learner taps ▶ there,
+// and the answer timer starts after roughly the clip's length.
+let driveTimer=0;
+function showDrive(sc,onEnd){
+  clearTimeout(driveTimer);
+  $('ownvid').hidden=true;$('shield').hidden=true;
+  const w=$('drivewrap');w.hidden=false;
+  w.innerHTML=`<iframe src="https://drive.google.com/file/d/${sc.drive}/preview" allow="autoplay; fullscreen" allowfullscreen title="Видео"></iframe>`;
+  // we can't see when ▶ is pressed inside Drive's player, so give time to press it before the answer timer runs
+  if(onEnd)driveTimer=setTimeout(onEnd,(sc.e-sc.s+10)*1000);
+}
 function showClip(sc){
   $('stage').classList.add('video');$('art').hidden=true;$('sub').hidden=true;
-  $('ytwrap').hidden=false;$('shield').hidden=false;$('vmsg').hidden=true;
+  $('ytwrap').hidden=!!sc.file;$('ownvid').hidden=!sc.file;$('shield').hidden=false;$('vmsg').hidden=true;
+  $('drivewrap').hidden=true;$('drivewrap').innerHTML='';
+  if(sc.file){
+    $('mask').hidden=true;$('shield').classList.add('full');
+    $('sub').textContent=sc.t;$('sub').hidden=P.mode!=='sub';
+    $('tag').textContent='Видео автора · C1';
+    if(sc.drive){showDrive(sc,startTimer);return}
+    playOwn(sc,1,startTimer);return;
+  }
   // Easy Turkish videos have subtitles burned into the picture: cover them; series clips play full-frame
   $('mask').hidden=!sc.burn;$('shield').classList.toggle('full',!sc.burn);
   if(sc.burn)$('maskTxt').innerHTML=P.mode==='sub'?esc(sc.t):'<span class="muted">Субтитры скрыты · слушайте</span>';
@@ -782,12 +834,15 @@ function showClip(sc){
 }
 function resetStage(){
   $('stage').classList.remove('video');$('art').hidden=false;
-  for(const id of ['ytwrap','mask','shield','playOver','vmsg'])$(id).hidden=true;
+  for(const id of ['ytwrap','ownvid','drivewrap','mask','shield','playOver','vmsg'])$(id).hidden=true;
+  $('drivewrap').innerHTML='';
 }
 function replay(rate){
   const sc=R&&R.list[R.i];if(!sc)return;
   const cb=R.answered?null:startTimer;
-  if(sc.kind==='clip'){if(window.YT&&window.YT.Player)playClip(sc,rate||1,cb)}
+  if(sc.kind==='clip'&&sc.drive)showDrive(sc,cb);
+  else if(sc.kind==='clip'&&sc.file)playOwn(sc,rate||1,cb);
+  else if(sc.kind==='clip'){if(window.YT&&window.YT.Player)playClip(sc,rate||1,cb)}
   else speak(sc.t,sc.g,rate||RATES[P.speed],cb);
 }
 
@@ -897,7 +952,8 @@ function renderHome(){
   $('reviewBtn').textContent=rv?`Повторить ошибки (${rv})`:'Ошибок для повторения пока нет';
   $('reviewBtn').disabled=!rv;
 }
-const fits=s=>(P.topic==='all'||s.tp===P.topic)&&(P.len==='all'||s.lv===P.len)&&(P.lvl==='all'||s.cefr===P.lvl);
+// C1 holds only the owner's own videos, and they appear only when C1 is chosen (topic/length filters don't apply to them)
+const fits=s=>s.own?P.lvl==='C1':(P.topic==='all'||s.tp===P.topic)&&(P.len==='all'||s.lv===P.len)&&(P.lvl==='all'||s.cefr===P.lvl);
 function pool(){return SCENES.filter(fits)}
 function clipPool(){return CLIPS.filter(fits)}
 // take n items from a list, preferring ones not seen yet; resets that list's "seen" marks when it runs dry
@@ -928,7 +984,7 @@ function show(id){for(const s of ['home','play','done','board'])$(s).hidden=s!==
 function startRound(review,video){
   let list;
   if(review){list=shuffle(P.review.map(id=>BYID[id]).filter(Boolean)).slice(0,10)}
-  else if(video){list=takeFresh(CLIPS,'seenV',10)}
+  else if(video){list=takeFresh(CLIPS.filter(c=>!c.own||P.lvl==='C1'),'seenV',10)}
   else{
     // mixed round: about 4 of 10 are real video clips, the rest animated scenes (topic and length filters apply to both)
     const sp=pool(),cp=clipPool();
@@ -984,7 +1040,7 @@ function answer(btn){
   const fb=$('fb');fb.hidden=false;fb.className='fb '+(ok?'ok':'bad');fb.textContent=ok?`✓ Верно · +${pts}`:'✗ Неверно · фраза добавлена в повторение';
   $('ptsNow').textContent=ochki(R.pts);
   if(sc.kind==='clip'&&sc.burn)$('maskTxt').textContent=sc.t;else{$('sub').textContent=sc.t;$('sub').hidden=false}
-  const src=sc.kind==='clip'?`<div class="src">Источник: <a href="https://www.youtube.com/watch?v=${sc.vid}&t=${Math.floor(sc.s)}s" target="_blank" rel="noopener">${esc(VSRC[sc.vid]||'YouTube')} ↗</a></div>`:'';
+  const src=sc.file?'<div class="src">Видео автора курса</div>':sc.kind==='clip'?`<div class="src">Источник: <a href="https://www.youtube.com/watch?v=${sc.vid}&t=${Math.floor(sc.s)}s" target="_blank" rel="noopener">${esc(VSRC[sc.vid]||'YouTube')} ↗</a></div>`:'';
   $('gloss').innerHTML=`<div class="tr">${esc(sc.t)}</div><div class="ru">${esc(sc.r)}</div><dl>${sc.w.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('')}</dl>${src}`;
   $('gloss').hidden=false;$('actions').hidden=false;
   $('nextBtn').textContent=R.i+1<R.list.length?'Дальше →':'Итоги →';
