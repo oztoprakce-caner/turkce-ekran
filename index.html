@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="РўСѓСЂРµС†РєРёР№ РґР»СЏ СЂСѓСЃСЃРєРѕРіРѕРІРѕСЂСЏС‰РёС…: Р°РЅРёРјРёСЂРѕРІР°РЅРЅС‹Рµ СЃС†РµРЅС‹ Рё РЅР°СЃС‚РѕСЏС‰РёРµ РІРёРґРµРѕ СЃ С‚СѓСЂРµС†РєРѕР№ СЂРµС‡СЊСЋ.">
+<meta name="description" content="Турецкий для русскоговорящих: анимированные сцены и настоящие видео с турецкой речью.">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
 </head>
 <body><title>Турецкий экран</title>
@@ -116,6 +116,7 @@ select{flex:1 1 220px;min-width:0;font:inherit;font-size:14px;padding:10px 12px;
 /* video */
 .vbanner{display:flex;flex-direction:column;gap:3px;text-align:left;border:0;border-radius:16px;padding:14px 16px;background:linear-gradient(115deg,#B8323C,#D9622F);color:#fff;box-shadow:0 10px 24px -16px rgba(150,40,30,.8)}
 .vbanner:hover{filter:brightness(1.05)}
+.vbanner:disabled{opacity:.5;filter:grayscale(.6);cursor:default}
 .vb-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
 .vb-title{font-family:var(--font-display);font-size:18px;font-weight:700}
 .vb-sub{font-size:13px;opacity:.9}
@@ -961,7 +962,9 @@ function renderHome(){
   $('stRev').textContent=P.review.length;
   $('boardBtn').hidden=!LB_URL;$('whoRow').hidden=!(LB_URL&&P.name);$('whoName').textContent=P.name;
   $('sceneCount').textContent=SCENES.length+' '+plural(SCENES.length,'сцена','сцены','сцен');
-  $('vbSub').textContent=`${CLIPS.length} ${plural(CLIPS.length,'фрагмент','фрагмента','фрагментов')}: 9 турецких сериалов и ролики Easy Turkish`;
+  const vn=vidPool().length,lv=P.lvl==='all'?'':' уровня '+P.lvl;
+  $('vbSub').textContent=vn?`${vn} ${plural(vn,'фрагмент','фрагмента','фрагментов')}${lv}: ${P.lvl==='C1'?'видео автора курса':'турецкие сериалы и ролики Easy Turkish'}`:`Нет видео${lv}`;
+  $('videoBtn').disabled=!vn;
   for(const b of $('lvlSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.lvl);
   $('topics').innerHTML=TOPICS.map(([id,ru])=>`<button type="button" class="chip" id="tp-${id}" data-v="${id}" aria-pressed="${P.topic===id}">${ru}</button>`).join('');
   for(const b of $('modeSeg').children)b.setAttribute('aria-pressed',b.dataset.v===P.mode);
@@ -970,7 +973,7 @@ function renderHome(){
   const n=pool().length+clipPool().length;
   $('startBtn').textContent=n?`Начать · ${Math.min(10,n)} ${plural(Math.min(10,n),'задание','задания','заданий')}`:'Нет заданий для этого выбора';
   $('startBtn').disabled=!n;
-  const rv=P.review.length;
+  const rv=revPool().length;
   $('reviewBtn').textContent=rv?`Повторить ошибки (${rv})`:'Ошибок для повторения пока нет';
   $('reviewBtn').disabled=!rv;
 }
@@ -978,6 +981,10 @@ function renderHome(){
 const fits=s=>s.own?P.lvl==='C1':(P.topic==='all'||s.tp===P.topic)&&(P.len==='all'||s.lv===P.len)&&(P.lvl==='all'||s.cefr===P.lvl);
 function pool(){return SCENES.filter(fits)}
 function clipPool(){return CLIPS.filter(fits)}
+// level is a hard filter everywhere: video mode and review only ever show items of the chosen level
+const lvlOk=s=>s.own?P.lvl==='C1':(P.lvl==='all'||s.cefr===P.lvl);
+function vidPool(){return CLIPS.filter(lvlOk)}
+function revPool(){return P.review.map(id=>BYID[id]).filter(s=>s&&lvlOk(s))}
 // take n items from a list, preferring ones not seen yet; resets that list's "seen" marks when it runs dry
 function takeFresh(all,seenKey,n){
   let fresh=all.filter(s=>!P[seenKey].includes(s.id));
@@ -1005,8 +1012,8 @@ let R=null,raf=0;
 function show(id){for(const s of ['home','play','done','board'])$(s).hidden=s!==id;window.scrollTo(0,0)}
 function startRound(review,video){
   let list;
-  if(review){list=shuffle(P.review.map(id=>BYID[id]).filter(Boolean)).slice(0,10)}
-  else if(video){list=takeFresh(CLIPS.filter(c=>!c.own||P.lvl==='C1'),'seenV',10)}
+  if(review){list=shuffle(revPool()).slice(0,10)}
+  else if(video){list=takeFresh(vidPool(),'seenV',10)}
   else{
     // mixed round: about 4 of 10 are real video clips, the rest animated scenes (topic and length filters apply to both)
     const sp=pool(),cp=clipPool();
@@ -1076,8 +1083,8 @@ function finish(){
   $('doneLine').textContent=`+${ochki(R.pts)} · всего ${ochki(P.pts)}`;
   $('missWrap').hidden=!R.miss.length;
   $('missList').innerHTML=R.miss.map(s=>s.own?`<div><b>${esc(s.r)}</b><span>Видео автора · C1</span></div>`:`<div><b>${esc(s.t)}</b><span>${esc(s.r)}</span></div>`).join('');
-  $('doneReview').hidden=!P.review.length;
-  $('doneReview').textContent=`Повторить ошибки (${P.review.length})`;
+  $('doneReview').hidden=!revPool().length;
+  $('doneReview').textContent=`Повторить ошибки (${revPool().length})`;
   P.rounds++;save();
   const ds=$('doneSent');ds.hidden=!(LB_URL&&P.name);$('doneBoard').hidden=!LB_URL;
   if(LB_URL&&P.name){ds.textContent='Отправляем результат в рейтинг…';
@@ -1141,7 +1148,7 @@ $('nextBtn').addEventListener('click',next);
 $('exitBtn').addEventListener('click',()=>{stopSpeech();cancelAnimationFrame(raf);R=null;renderHome();show('home')});
 $('startBtn').addEventListener('click',()=>withName(()=>startRound(false)));
 $('reviewBtn').addEventListener('click',()=>withName(()=>startRound(true)));
-$('againRound').addEventListener('click',()=>startRound(!!(R&&R.review&&P.review.length),!!(R&&R.video)));
+$('againRound').addEventListener('click',()=>startRound(!!(R&&R.review&&revPool().length),!!(R&&R.video)));
 $('doneReview').addEventListener('click',()=>startRound(true));
 $('homeBtn').addEventListener('click',()=>{R=null;renderHome();show('home')});
 $('stage').addEventListener('click',()=>{const sc=R&&R.list[R.i];if(sc&&sc.kind!=='clip')replay()});
